@@ -71,7 +71,7 @@ $(function() {
             $(this).prop('checked', criticality.indexOf(this.value) > -1);
         });
         $('input[name=hours-ago]').val($.bbq.getState('hours_ago') || 1);
-        var until = $.bbq.getState('until');
+        var until = $.bbq.getState('until') || -1;
         if (until == -1) {
             $('input[name=until-type][value="Now"]').prop('checked', true);
             $filters.find('input[name=until-timestamp]').val(unixNow());
