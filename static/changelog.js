@@ -66,7 +66,7 @@ $(function() {
 
     // Initial load
     (function() {
-        var criticality = $.bbq.getState('criticality').split(',');
+        var criticality = ($.bbq.getState('criticality') || '').split(',');
         $('input[name=criticality]').each(function() {
             $(this).prop('checked', criticality.indexOf(this.value) > -1);
         });
@@ -80,7 +80,7 @@ $(function() {
             $('input[name=until-type][value="unix-timestamp"]').prop('checked', true);
             $('input[name=until-timestamp]').val(until);
         }
-        var category = $.bbq.getState('category').split(',');
+        var category = ($.bbq.getState('category') || '').split(',');
         $('input[type=checkbox][name=category]').each(function() {
             $(this).prop('checked', category.indexOf(this.value) > -1);
         });
