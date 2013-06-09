@@ -1,3 +1,4 @@
+import sqlite3
 import time
 from flask import Flask, render_template
 from flask.ext.restful import reqparse, Api, Resource
@@ -53,9 +54,13 @@ class EventList(Resource):
     def post(self):
         json = json_parser.parse_args()
         db = get_db()
-        db.execute('insert into events (criticality, unix_timestamp, description, category) '
-                   'VALUES (?, ?, ?, ?)',
-                   [json['criticality'], json['unix_timestamp'], json['description'], json['category']])
+        try:
+            db.execute('insert into events (criticality, unix_timestamp, description, category) '
+                       'VALUES (?, ?, ?, ?)',
+                       [json['criticality'], json['unix_timestamp'], json['description'], json['category']])
+        except sqlite3.IntegrityError:
+            pass  # This happens if we try to add the same event multiple times
+                  # Don't really care about that
         db.commit()
         return 'OK', 201
 
