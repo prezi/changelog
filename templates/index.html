@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Changelog :)</title>
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+</head>
+<body>
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.ba-bbq/1.2.1/jquery.ba-bbq.min.js"></script>
+<script src="/static/changelog.js"></script>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <form id="filters">
+            <div class="span2">
+                <fieldset>
+                    <legend>Criticality</legend>
+                    {% for criticality in range(1,6)|reverse %}
+                    <label class="checkbox">
+                        <input type="checkbox" name="criticality" value="{{ criticality }}">
+                        {{ criticality }}
+                        {% if criticality == 5 %}(Most critical){% endif %}
+                        {% if criticality == 1 %}(Least critical){% endif %}
+                    </label>
+                    {% endfor %}
+                    <button id="clear-criticality-filter" class="btn" type="button">Show all criticalities</button>
+                </fieldset>
+            </div>
+            <div class="span3">
+            <fieldset>
+                <legend>Time-range</legend>
+                <label>
+                    Show
+                    <input type="number" name="hours-ago" min="0.5" step="0.5" value="1">
+                    hours
+                </label>
+                <label>
+                    Up to
+                    <label class="radio"><input type="radio" name="until-type" value="Now" checked>Now</label>
+                    <label class="radio"><input type="radio" name="until-type" value="unix-timestamp">
+                        <label>Unix timestamp</label>
+                        <input type="number" name="until-timestamp">
+                    </label>
+                </label>
+            </fieldset>
+            </div>
+            <div class="span2">
+            <fieldset>
+                <legend>Categories</legend>
+                <div>(You can scroll the list)</div>
+                <div class="controls category-container">
+                    {% for category in categories %}
+                    <label class="checkbox">
+                        <input type="checkbox" name="category" value="{{category}}">{{category}}
+                    </label>
+                    {% endfor %}
+                </div>
+                <button id="clear-category-filter" class="btn" type="button">Show all categories</button>
+            </fieldset>
+            </div>
+            <div class="span5">
+            <fieldset>
+                <legend><a href="#" id="permalink">Permalink</a></legend>
+                <div>
+                    <pre id="permalink-code"></pre>
+                </div>
+            </fieldset>
+            </div>
+        </form>
+    </div>
+    <div class="row-fluid">
+        <table id="events" class="table table-bordered table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Criticality</th>
+                <th>Category</th>
+                <th>Time</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

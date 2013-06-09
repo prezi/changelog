@@ -1,0 +1,14 @@
+fieldset {
+    margin: 20px;
+}
+
+input[name=hours-ago] {
+    width: 50px;
+}
+
+.category-container {
+    height: 110px;
+    overflow: scroll;
+    border: 1px solid silver;
+    padding: 3px
+}
