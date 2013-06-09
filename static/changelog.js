@@ -29,11 +29,12 @@ $(function() {
             $filters.find('input[name=category]').each(function() {
                 $(this).prop('checked', this.value == category);
             });
-            loadAndRenderEvents();
+            updateHashFromControls();
+            loadEventsFromHash();
         });
     }
 
-    function loadAndRenderEvents() {
+    function updateHashFromControls() {
         var filters = {};
         // Criticality
         filters.criticality = $filters.find('input[name=criticality]:checked').map(
@@ -51,22 +52,9 @@ $(function() {
             function() { return this.value; }
         ).get().join(',');
         $.bbq.pushState(filters);
-        // Permalink
-        var permalinkFilters = $.extend({}, filters);
-        if (filters.until == -1) { permalinkFilters.until = unixNow(); }
-        var link = $.param.fragment(location.href, permalinkFilters);
-        $permalink.prop('href', link);
-        $permalinkCode.text(link);
-        // Request
-        for (var key in filters) {
-            if (!filters.hasOwnProperty(key)) continue;
-            if (filters[key].length == 0) delete filters[key];
-        }
-        $.get('/api/events', filters, renderEvents);
     }
 
-    // Initial load
-    (function() {
+    function updateControlsFromHash() {
         var criticality = ($.bbq.getState('criticality') || '').split(',');
         $('input[name=criticality]').each(function() {
             $(this).prop('checked', criticality.indexOf(this.value) > -1);
@@ -76,8 +64,7 @@ $(function() {
         if (until == -1) {
             $('input[name=until-type][value="Now"]').prop('checked', true);
             $filters.find('input[name=until-timestamp]').val(unixNow());
-        }
-        else {
+        } else {
             $('input[name=until-type][value="unix-timestamp"]').prop('checked', true);
             $('input[name=until-timestamp]').val(until);
         }
@@ -85,17 +72,45 @@ $(function() {
         $('input[type=checkbox][name=category]').each(function() {
             $(this).prop('checked', category.indexOf(this.value) > -1);
         });
-    })();
-    loadAndRenderEvents();
+    }
+
+    function updatePermalinkFromHash() {
+        var permalinkFilters = $.extend({}, $.bbq.getState());
+        if (permalinkFilters.until == -1) { permalinkFilters.until = unixNow(); }
+        var link = $.param.fragment(location.href, permalinkFilters);
+        $permalink.prop('href', link);
+        $permalinkCode.text(link);
+    }
+
+    function loadEventsFromHash() {
+        var filters = $.bbq.getState();
+        for (var key in filters) {
+            if (!filters.hasOwnProperty(key)) continue;
+            if (filters[key].length == 0) delete filters[key];
+        }
+        $.get('/api/events', filters, renderEvents);
+    }
 
     // Load on filter change
-    $filters.find('input').change(loadAndRenderEvents);
+    $filters.find('input').change(updateHashFromControls);
     $filters.find('#clear-criticality-filter').click(function() {
         $filters.find('input[name=criticality]').prop('checked', false);
-        loadAndRenderEvents();
+        updateHashFromControls();
     });
     $filters.find('#clear-category-filter').click(function() {
         $filters.find('input[name=category]').prop('checked', false);
-        loadAndRenderEvents();
-    })
+        updateHashFromControls();
+    });
+
+    // Update, reload stuff on hash change
+    $(window).bind("hashchange", function(e) {
+        updateControlsFromHash();
+        updatePermalinkFromHash();
+        loadEventsFromHash();
+    });
+
+    // Initial load based on URL
+    updateControlsFromHash();
+    updatePermalinkFromHash();
+    loadEventsFromHash();
 });
