@@ -70,7 +70,7 @@ $(function() {
         $('input[name=criticality]').each(function() {
             $(this).prop('checked', criticality.indexOf(this.value) > -1);
         });
-        $('input[name=hours-ago]').val($.bbq.getState('hours_ago'));
+        $('input[name=hours-ago]').val($.bbq.getState('hours_ago') || 1);
         var until = $.bbq.getState('until');
         if (until == -1) {
             $('input[name=until-type][value="Now"]').prop('checked', true);
