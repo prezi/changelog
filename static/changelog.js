@@ -52,7 +52,8 @@ $(function() {
         ).get().join(',');
         $.bbq.pushState(filters);
         // Permalink
-        var permalinkFilters = $.extend({}, filters, {until: unixNow()});
+        var permalinkFilters = $.extend({}, filters);
+        if (filters.until == -1) { permalinkFilters.until = unixNow(); }
         var link = $.param.fragment(location.href, permalinkFilters);
         $permalink.prop('href', link);
         $permalinkCode.text(link);
