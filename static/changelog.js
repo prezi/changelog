@@ -111,6 +111,7 @@ $(function() {
 
     // Initial load based on URL
     updateControlsFromHash();
+    updateHashFromControls();
     updatePermalinkFromHash();
     loadEventsFromHash();
 });
