@@ -109,9 +109,9 @@ $(function() {
         loadEventsFromHash();
     });
 
-    // Initial load based on URL
-    updateControlsFromHash();
-    updateHashFromControls();
+    // Initial load based on URL and HTML control defaults
+    updateControlsFromHash();    // Hash is always right
+    updateHashFromControls();    // HTML controls can also be right if the hash doesn't care
     updatePermalinkFromHash();
     loadEventsFromHash();
 });
