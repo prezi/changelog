@@ -10,4 +10,4 @@ prezicurl https://changelog.prezi.com/api/events \
   -d '{"criticality": 1, "unix_timestamp": 1395334488, "category": "misc", "description": "cli test"}'
 ```
 
-(prezicurl: https://github.com/prezi/prezi-attic/blob/master/prezicurl)
+(`prezicurl` just does authentication: https://github.com/prezi/prezi-attic/blob/master/prezicurl)
