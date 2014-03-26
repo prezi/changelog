@@ -5,6 +5,9 @@ from flask.ext.restful import reqparse, Api, Resource
 from db import get_db, close_db_connection_on_app_teardown
 
 app = Flask(__name__)
+app.config['SENTRY_DSN'] = 'udp://6c14a02a8bd948ef9158221852e68ad3:d506119280254f3e8bc86673b274f793@sentry.prezi.com:9001/10'
+sentry = Sentry(app)
+
 api = Api(app)
 
 
