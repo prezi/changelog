@@ -19,12 +19,12 @@ curl http://changelog.awesomecompany.com/api/events \
 The basic idea is that you'll send any event that has even a remote chance of causing problems to this system. Later,
 when something goes wrong, you can quickly check what's changed in the last minutes / hours.
 
-## Prerequisites
+## Getting started
+
+### Prerequisites
  - sqlite3
  - python 2
  - virtualenv
-
-## Getting started
 
 ### Setup
 
