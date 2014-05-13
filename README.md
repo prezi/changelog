@@ -64,7 +64,7 @@ TODO: remove the prezi sentry dsn from git history
 ## Considerations for running in production
 
  - Running under a WSGI server is highly recommended. This project uses the Flask framework, see their documentation for
-   running under [Apache](http://flask.pocoo.org/docs/deploying/mod_wsgi/) or [Standalone WSGI containers](http://flask.pocoo.org/docs/deploying/mod_wsgi/)
+   running under [Apache](http://flask.pocoo.org/docs/deploying/mod_wsgi/) or [Standalone WSGI containers](http://flask.pocoo.org/docs/deploying/wsgi-standalone/)
  - No authentication is provided, you'll probably want to put some authenticating proxy in front of this application.
    Pull requests for adding authentication support are of course welcome.
  - Similarly, no HTTPS termination is provided. Ideally the WSGI container will take care of that.
