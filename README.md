@@ -32,7 +32,7 @@ when something goes wrong, you can quickly check what's changed in the last minu
 TODO: link to script containing the setup script, curled, piped to bash
 
 #### Manually
-```
+```sh
 git clone https://github.com/prezi/changelog.git
 cd changelog
 ./setup.sh
@@ -52,10 +52,12 @@ to debug, but configuration always needs debugging).
 
 The default configuration values are in TODO link to settings.py.
 
-| `DB_NAME`     | Path to the sqlite3 database file. Default: `changelog.db`.                                       |
-| `LISTEN_PORT` | Port where the application will listen when started with `python application.py`. Default: `5000` |
-| `USE_SENTRY`  | Send exceptions to Sentry? Default: `False`                                                       |
-| `SENTRY_DSN`  | Sentry DSN, used only if `USE_SENTRY` is `True`. Default: `None`                                  |
+| Variable      | Description                                                                      | Default        |
+|---------------+----------------------------------------------------------------------------------+----------------|
+| `DB_NAME`     | Path to the sqlite3 database file.                                               |`changelog.db`  |
+| `LISTEN_PORT` | Port where the application will listen when started with `python application.py`.| `5000`         |
+| `USE_SENTRY`  | Send exceptions to Sentry?                                                       | `False`        |
+| `SENTRY_DSN`  | Sentry DSN, used only if `USE_SENTRY` is `True`.                                 | `None`         |
 
 TODO: remove the prezi sentry dsn from git history
 
