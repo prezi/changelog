@@ -4,7 +4,8 @@ Aims to answer the question "what's changed in the last hour?" in a distributed 
 proverbial bad things hit the proverbial ventilation hardware. It can drastically drop mean time to recovery.
 
 ![Changelog](docs/changelog.jpg)
-<small>Image gleefully copied from [Android Police](http://www.androidpolice.com/2011/03/07/cyanogenmod-7-rc2-rolling-out-now-packing-android-2-3-3-new-features-bugfixes/)</small>
+
+<tiny>Image gleefully copied from [Android Police](http://www.androidpolice.com/2011/03/07/cyanogenmod-7-rc2-rolling-out-now-packing-android-2-3-3-new-features-bugfixes/)</tiny>
 
 ## How?
 
