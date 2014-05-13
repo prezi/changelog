@@ -53,7 +53,7 @@ to debug, but configuration always needs debugging).
 The default configuration values are in TODO link to settings.py.
 
 | Variable      | Description                                                                      | Default        |
-|---------------+----------------------------------------------------------------------------------+----------------|
+|---------------|----------------------------------------------------------------------------------|----------------|
 | `DB_NAME`     | Path to the sqlite3 database file.                                               |`changelog.db`  |
 | `LISTEN_PORT` | Port where the application will listen when started with `python application.py`.| `5000`         |
 | `USE_SENTRY`  | Send exceptions to Sentry?                                                       | `False`        |
