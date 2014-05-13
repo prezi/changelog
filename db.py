@@ -1,7 +1,7 @@
 import sqlite3
 from flask import _app_ctx_stack
 
-DATABASE = 'changelog.db'
+import settings
 
 
 def dict_factory(cursor, row):
@@ -12,7 +12,7 @@ def dict_factory(cursor, row):
 
 
 def connect_db():
-    return sqlite3.connect(DATABASE)
+    return sqlite3.connect(settings.DB_NAME)
 
 
 def get_db():
@@ -21,7 +21,7 @@ def get_db():
     """
     top = _app_ctx_stack.top
     if not hasattr(top, 'sqlite_db'):
-        sqlite_db = sqlite3.connect(DATABASE)
+        sqlite_db = connect_db()
         sqlite_db.row_factory = dict_factory
         top.sqlite_db = sqlite_db
 

@@ -2,13 +2,16 @@ import sqlite3
 import time
 from flask import Flask, render_template
 from flask.ext.restful import reqparse, Api, Resource
-from db import get_db, close_db_connection_on_app_teardown
 from raven.contrib.flask import Sentry
 
+from db import get_db, close_db_connection_on_app_teardown
+import settings
 
 app = Flask(__name__)
-app.config['SENTRY_DSN'] = 'udp://6c14a02a8bd948ef9158221852e68ad3:d506119280254f3e8bc86673b274f793@sentry.prezi.com:9001/10'
-sentry = Sentry(app)
+
+if settings.USE_SENTRY:
+    app.config['SENTRY_DSN'] = settings.SENTRY_DSN
+    sentry = Sentry(app)
 
 api = Api(app)
 
@@ -80,4 +83,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=settings.LISTEN_PORT)
