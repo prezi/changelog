@@ -46,7 +46,7 @@ In case you're planning to send in lots of events (think hundreds per second), t
 
 ## Configuration
 
-You can set an environment variable `EXTRA_SETTINGS_PATH` to point to a python file. That file can set the values detailed
+You can set an environment variable `CHANGELOG_SETTINGS_PATH` to point to a python file. That file can set the values detailed
 below. The application prints the final configuration at startup to make debugging this easier (not that there's anything
 to debug, but configuration always needs debugging).
 
