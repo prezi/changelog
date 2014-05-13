@@ -25,6 +25,7 @@ when something goes wrong, you can quickly check what's changed in the last minu
  - sqlite3
  - python 2
  - virtualenv
+ - optionally: a [Sentry](https://getsentry.com/) server for collecting exceptions; not that there'll be any :)
 
 ### Setup
 
