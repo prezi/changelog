@@ -84,4 +84,5 @@ These tools made it possible to write it in a weekend. Huge thanks.
 - [jQuery BBQ](http://benalman.com/code/projects/jquery-bbq/docs/files/jquery-ba-bbq-js.html) and
   [jQuery hashchange](http://benalman.com/code/projects/jquery-hashchange/docs/files/jquery-ba-hashchange-js.html)
   for making the permalink simple to implement
+- [Sentry](http://getsentry.com/) for simple-to-use, awesome error reporting / collection / aggregation.
 - Those that we take for granted: sqlite3, python, virtualenv (and lots more...)
