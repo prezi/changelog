@@ -4,8 +4,6 @@ $(function() {
     var $permalink = $('#permalink');
     var $permalinkCode = $('#permalink-code');
 
-    function unixNow() { return Math.round($.now() / 1000); }
-
     function renderEvents(events) {
         $events.children().remove();
         for (var i = 0; i < events.length; i++) {
@@ -43,7 +41,7 @@ $(function() {
         // Time
         filters.hours_ago = $filters.find('input[name=hours-ago]').val();
         if ($filters.find('input[name=until-type]:checked').val() == 'unix-timestamp') {
-            filters.until = $filters.find('input[name=until-timestamp]').val();
+            filters.until = $filters.find('#until-timestamp').data('DateTimePicker').getDate().unix();
         } else {
             filters.until = -1;
         }
@@ -63,10 +61,10 @@ $(function() {
         var until = $.bbq.getState('until') || -1;
         if (until == -1) {
             $('input[name=until-type][value="Now"]').prop('checked', true);
-            $filters.find('input[name=until-timestamp]').val(unixNow());
+            $filters.find('#until-timestamp').data('DateTimePicker').setDate(moment());
         } else {
             $('input[name=until-type][value="unix-timestamp"]').prop('checked', true);
-            $('input[name=until-timestamp]').val(until);
+            $('#until-timestamp').data('DateTimePicker').setDate(moment.unix(until));
         }
         var category = ($.bbq.getState('category') || '').split(',');
         $('input[type=checkbox][name=category]').each(function() {
@@ -76,7 +74,7 @@ $(function() {
 
     function updatePermalinkFromHash() {
         var permalinkFilters = $.extend({}, $.bbq.getState());
-        if (permalinkFilters.until == -1) { permalinkFilters.until = unixNow(); }
+        if (permalinkFilters.until == -1) { permalinkFilters.until = moment().unix(); }
         var link = $.param.fragment(location.href, permalinkFilters);
         $permalink.prop('href', link);
         $permalinkCode.text(link);
@@ -93,6 +91,7 @@ $(function() {
 
     // Load on filter change
     $filters.find('input').change(updateHashFromControls);
+    $filters.find('#until-timestamp').on('dp.change', updateHashFromControls);
     $filters.find('#clear-criticality-filter').click(function() {
         $filters.find('input[name=criticality]').prop('checked', false);
         updateHashFromControls();
@@ -110,6 +109,7 @@ $(function() {
     });
 
     // Initial load based on URL and HTML control defaults
+    $('#until-timestamp').datetimepicker();
     updateControlsFromHash();    // Hash is always right
     updateHashFromControls();    // HTML controls can also be right if the hash doesn't care
     updatePermalinkFromHash();

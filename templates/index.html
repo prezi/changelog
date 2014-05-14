@@ -3,12 +3,16 @@
 <head>
     <title>Changelog :)</title>
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" type="text/css" href="/static/style.css">
 </head>
 <body>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.ba-bbq/1.2.1/jquery.ba-bbq.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-hashchange/v1.3/jquery.ba-hashchange.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js"></script>
 <script src="/static/changelog.js"></script>
 <div class="container-fluid">
     <div class="row">
@@ -53,7 +57,11 @@
                         <div class="radio">
                             <label>
                                 <input type="radio" name="until-type" value="unix-timestamp"> Unix timestamp
-                                <input type="number" name="until-timestamp" class="form-control">
+                                <div class='input-group date' id='until-timestamp' data-date-format="YYYY-MM-DD HH:mm">
+                                    <input type='text' class="form-control" />
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
                             </label>
                         </div>
                     </div>
