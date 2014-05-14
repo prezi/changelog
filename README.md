@@ -95,7 +95,9 @@ These tools made it possible to write `changelog` in a weekend. Huge thanks.
 - [Sentry](http://getsentry.com/) for simple-to-use, awesome error reporting / collection / aggregation
 - Those that we take for granted: sqlite3, python, virtualenv, and the list goes on...
 
-<br>
-!(Changelog)[docs/changelog.jpg]
+<hr>
+
+![Changelog](docs/changelog.jpg)
+
 <sup>Image gleefully copied from [Android Police](http://www.androidpolice.com/2011/03/07/cyanogenmod-7-rc2-rolling-out-now-packing-android-2-3-3-new-features-bugfixes/)</sup>
 
