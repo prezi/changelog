@@ -93,6 +93,7 @@ These tools made it possible to write `changelog` in a weekend. Huge thanks.
   [jQuery hashchange](http://benalman.com/code/projects/jquery-hashchange/docs/files/jquery-ba-hashchange-js.html)
   for making the permalink simple to implement
 - [Sentry](http://getsentry.com/) for simple-to-use, awesome error reporting / collection / aggregation
+- [cdnjs](http://cdnjs.com/) for hosting all the client-side libraries above
 - Those that we take for granted: sqlite3, python, virtualenv, and the list goes on...
 
 <hr>
