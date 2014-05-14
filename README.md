@@ -66,8 +66,6 @@ Values you can set:
 
 The default configuration values are in TODO link to settings.py.
 
-TODO: invalidate the prezi sentry dsn in stored in git history
-
 ## Considerations for running in production
 
  - Running under a WSGI server is highly recommended. This project uses the Flask framework, see their documentation for
