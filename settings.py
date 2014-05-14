@@ -9,9 +9,15 @@ SENTRY_DSN = None
 import os
 extra_settings_path = os.getenv('CHANGELOG_SETTINGS_PATH')
 if extra_settings_path is not None:
-    print 'Loading user-specified settings from %s' % extra_settings_path
+    try:
+        print 'Loading user-specified settings from %s' % extra_settings_path
+    except IOError:
+        pass
     import imp
     extra_settings_module = imp.load_source('extra_settings', extra_settings_path)
     globals().update(dict([(key, value) for key, value in extra_settings_module.__dict__.iteritems() if not key.startswith('__')]))
 
-print 'Starting with settings', dict([(key, value) for key, value in globals().items() if key.isupper()])
+try:
+    print 'Starting with settings', dict([(key, value) for key, value in globals().items() if key.isupper()])
+except IOError:
+    pass
