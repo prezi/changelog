@@ -1,8 +1,8 @@
-Flask==0.9
-Flask-RESTful==0.2.3
-Jinja2==2.7
-MarkupSafe==0.18
-Werkzeug==0.8.3
+Flask==0.10.1
+Flask-RESTful==0.2.12
+Jinja2==2.7.2
+MarkupSafe==0.23
+Werkzeug==0.9.4
 wsgiref==0.1.2
 raven==4.1.1
 blinker==1.3
