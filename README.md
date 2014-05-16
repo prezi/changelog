@@ -42,6 +42,15 @@ Some ideas for events to send:
 ### Setup - Do you trust me?
 TODO: link to script containing the setup script, curled, piped to bash
 
+### Setup - Docker
+
+A public image may be coming up. Until then:
+
+```sh
+sudo docker build -t changelog .
+sudo docker run -d -p 80:8000 changelog
+```
+
 #### Setup - Manually
 ```sh
 git clone https://github.com/prezi/changelog.git
