@@ -33,7 +33,7 @@ Some ideas for events to send:
 
 ## Getting started
 
-### Prerequisites
+#### Prerequisites
  - sqlite3
  - python 2
  - virtualenv
