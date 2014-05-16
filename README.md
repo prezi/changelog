@@ -60,14 +60,14 @@ look like this:
 
 ```python
 LISTEN_PORT = 8080
-DB_NAME = '/opt/foo/bar/local/changelog.db'
+DB_PATH = '/opt/foo/bar/local/changelog.db'
 ```
 
 Values you can set:
 
 | Variable      | Description                                                                      | Default        |
 |---------------|----------------------------------------------------------------------------------|----------------|
-| `DB_NAME`     | Path to the sqlite3 database file.                                               |`changelog.db`  |
+| `DB_PATH`     | Path to the sqlite3 database file.                                               |`/opt/changelog/changelog.db`  |
 | `LISTEN_PORT` | Port where the application will listen when started with `python application.py`.| `5000`         |
 | `USE_SENTRY`  | Send exceptions to Sentry?                                                       | `False`        |
 | `SENTRY_DSN`  | Sentry DSN, used only if `USE_SENTRY` is `True`.                                 | `None`         |

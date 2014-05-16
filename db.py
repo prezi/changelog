@@ -12,7 +12,7 @@ def dict_factory(cursor, row):
 
 
 def connect_db():
-    return sqlite3.connect(settings.DB_NAME)
+    return sqlite3.connect(settings.DB_PATH)
 
 
 def get_db():
