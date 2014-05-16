@@ -9,7 +9,8 @@ proverbial bad things hit the proverbial ventilation hardware. It can drasticall
 The basic idea is that you'll send any event that has even a remote chance of causing problems to this system. Later,
 when something goes wrong, you can quickly check what's changed in the last minutes / hours.
 
-The web interface: TODO screenshot
+The web interface:
+![Web UI](docs/screenshot.png)
 
 Sending events is simple:
 
@@ -21,6 +22,13 @@ curl http://changelog.awesomecompany.com/api/events \
 ```
 
 All four JSON fields are required, and there are no other fields the server understands.
+
+Some ideas for events to send:
+ - deployment, release
+ - feature (switch|flag|toggle) changes
+ - changes to chef / puppet / ansible / ...
+ - changes to DNS configuration
+ - cloud instances started, stopped
 
 
 ## Getting started
@@ -64,7 +72,7 @@ Values you can set:
 | `USE_SENTRY`  | Send exceptions to Sentry?                                                       | `False`        |
 | `SENTRY_DSN`  | Sentry DSN, used only if `USE_SENTRY` is `True`.                                 | `None`         |
 
-The default configuration values are in TODO link to settings.py.
+The default configuration values are in [settings.py](settings.py).
 
 ## Considerations for running in production
 
@@ -85,7 +93,9 @@ These tools made it possible to write `changelog` in a weekend. Huge thanks.
 
 - [Flask](http://flask.pocoo.org/), the lightweight Python web framework and
   [Flask-RESTful](http://flask-restful.readthedocs.org/en/latest/) for making the REST api trivial to write
-- [Bootstrap](http://getbootstrap.com/), for making the UI look not terrible
+- [Bootstrap](http://getbootstrap.com/), for making the whole UI look not terrible
+  and [bootstrap-datetimepicker](http://bootstrap-datepicker.readthedocs.org/en/release/) for making the date chooser
+  pretty awesome
 - [jQuery](http://jquery.com/), because obviously
 - [jQuery BBQ](http://benalman.com/code/projects/jquery-bbq/docs/files/jquery-ba-bbq-js.html) and
   [jQuery hashchange](http://benalman.com/code/projects/jquery-hashchange/docs/files/jquery-ba-hashchange-js.html)
