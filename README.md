@@ -39,10 +39,10 @@ Some ideas for events to send:
  - virtualenv
  - optionally: a [Sentry](https://getsentry.com/) server for collecting exceptions; not that there'll be any :)
 
-### Setup - Do you trust me?
+#### Setup - Do you trust me?
 TODO: link to script containing the setup script, curled, piped to bash
 
-### Setup - Docker
+#### Setup - Docker
 
 A public image may be coming up. Until then:
 
