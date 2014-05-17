@@ -53,6 +53,10 @@ class EventList(Resource):
             category = query['category'].split(',')
             filters.append('category in (%s)' % ','.join(['?'] * len(category)))
             sql_parameters += category
+        # description
+        if query['description'] is not None:
+            filters.append('description like (?)')
+            sql_parameters.append("%%%s%%" % query['description'])
         sql = 'select * from events'
         if len(filters) > 0:
             sql += ' where ' + ' and '.join(filters)

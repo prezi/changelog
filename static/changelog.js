@@ -49,6 +49,8 @@ $(function() {
         filters.category = $filters.find('input[name=category]:checked').map(
             function() { return this.value; }
         ).get().join(',');
+        // Description
+        filters.description = $filters.find('input[name=description]').val();
         $.bbq.pushState(filters);
     }
 
@@ -70,6 +72,7 @@ $(function() {
         $('input[type=checkbox][name=category]').each(function() {
             $(this).prop('checked', category.indexOf(this.value) > -1);
         });
+        $('input[name=description]').val($.bbq.getState('description') || '');
     }
 
     function updatePermalinkFromHash() {
