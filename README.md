@@ -51,6 +51,9 @@ sudo docker build -t changelog .
 sudo docker run -d -p 80:8000 changelog
 ```
 
+Watch out: with the current Dockerfile, upgrading the application in the container will erase the database. It may not
+be a huge issue if you don't want to keep a long history, but keep it in mind.
+
 #### Setup - Manually
 ```sh
 git clone https://github.com/prezi/changelog.git
@@ -91,6 +94,12 @@ The default configuration values are in [settings.py](settings.py).
    Pull requests for adding authentication support are of course welcome.
  - Similarly, no HTTPS termination is provided. Ideally the WSGI container will take care of that.
  - If you plan to send a ton of events, sqlite will probably soon become a bottleneck.
+
+## Contributing
+
+Feature requests are welcome, bug reports are especially welcome, and pull requests are super welcome. Please make sure
+to use a feature branch in your fork. Don't look too hard for tests, there are none - not for a lack of belief in tests,
+but because the application is almost trivial.
 
 ## Credits
 
