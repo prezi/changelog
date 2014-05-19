@@ -92,29 +92,29 @@ $(function() {
         $.get('/api/events', filters, renderEvents);
     }
 
-    // Load on filter change
-    $filters.find('input').change(updateHashFromControls);
-    $filters.find('#until-timestamp').on('dp.change', updateHashFromControls);
-    $filters.find('#clear-criticality-filter').click(function() {
-        $filters.find('input[name=criticality]').prop('checked', false);
-        updateHashFromControls();
-    });
-    $filters.find('#clear-category-filter').click(function() {
-        $filters.find('input[name=category]').prop('checked', false);
-        updateHashFromControls();
-    });
-
-    // Update, reload stuff on hash change
-    $(window).bind("hashchange", function(e) {
-        updateControlsFromHash();
-        updatePermalinkFromHash();
-        loadEventsFromHash();
-    });
-
     // Initial load based on URL and HTML control defaults
     $('#until-timestamp').datetimepicker();
     updateControlsFromHash();    // Hash is always right
     updateHashFromControls();    // HTML controls can also be right if the hash doesn't care
     updatePermalinkFromHash();
     loadEventsFromHash();
+
+    // Load on filter change
+    $filters.find('input').change(updateHashFromControls);
+    $filters.find('#until-timestamp').on('dp.change', updateHashFromControls);
+    $filters.find('#clear-criticality-filter').click(function() {
+      $filters.find('input[name=criticality]').prop('checked', false);
+      updateHashFromControls();
+    });
+    $filters.find('#clear-category-filter').click(function() {
+      $filters.find('input[name=category]').prop('checked', false);
+      updateHashFromControls();
+    });
+
+    // Update, reload stuff on hash change
+    $(window).bind("hashchange", function(e) {
+      updateControlsFromHash();
+      updatePermalinkFromHash();
+      loadEventsFromHash();
+    });
 });
