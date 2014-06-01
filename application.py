@@ -87,4 +87,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=settings.LISTEN_PORT)
+    app.run(debug=True, host=settings.LISTEN_HOST, port=settings.LISTEN_PORT)
