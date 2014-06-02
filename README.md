@@ -96,7 +96,7 @@ The default configuration values are in [settings.py](settings.py).
 
 Feature requests are welcome, bug reports are especially welcome, and pull requests are super welcome. Please make sure
 to use a feature branch in your fork. Don't look too hard for tests, there are none - not for a lack of belief in tests,
-but because the application is almost trivial.
+but because the application is almost trivial. Please make sure you also update the README to reflect your changes. While you're there you may as well add yourself to the Credits section too :)
 
 ## Credits
 
