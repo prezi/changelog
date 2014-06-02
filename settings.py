@@ -1,4 +1,5 @@
 DB_PATH = 'changelog.db'  # this is the db created by setup.sh; be sure to keep this and the actual db name in sync
+LISTEN_HOST = "127.0.0.1"
 LISTEN_PORT = 5000
 
 # Use these to enable sending problems to Sentry

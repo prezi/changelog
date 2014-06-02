@@ -77,6 +77,7 @@ Values you can set:
 | Variable      | Description                                                                      | Default        |
 |---------------|----------------------------------------------------------------------------------|----------------|
 | `DB_PATH`     | Path to the sqlite3 database file.                                               |`/opt/changelog/changelog.db`  |
+| `LISTEN_HOST` | IP address where the application will listen when started with `python application.py`.| `127.0.0.1`         |
 | `LISTEN_PORT` | Port where the application will listen when started with `python application.py`.| `5000`         |
 | `USE_SENTRY`  | Send exceptions to Sentry?                                                       | `False`        |
 | `SENTRY_DSN`  | Sentry DSN, used only if `USE_SENTRY` is `True`.                                 | `None`         |
@@ -102,6 +103,7 @@ but because the application is almost trivial. Please make sure you also update 
 
  - Roy Rapoport (@royrapoport) for inspiring this tool with his talk at the
    [SF Metrics Meetup](http://blog.librato.com/posts/2013/6/12/sf-metrics-meetup-change-reporting-and-building-metrics-from-log-data)
+ - Ryan Bowlby (@rbowlby)
 
 ## Awesome tools used
 These tools made it possible to write `changelog` in a weekend. Huge thanks.
