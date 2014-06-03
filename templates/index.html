@@ -43,33 +43,41 @@
                 <fieldset>
                     <legend>Time-range</legend>
                     <div class="form-group">
-                        Show
-                        <input type="number" class="form-control" name="hours-ago" min="0.5" step="0.5"
-                               style="display: inline; width: 80px;">
-                        hours
-                    </div>
-                    <div class="form-group">
-                        Up to
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="until-type" value="Now" checked> Now
+                        <div class="btn-group" data-toggle="buttons" id="relative-time-ranges">
+                            {% for amount, unit in [(1, 'h'), (4, 'h'), (1, 'd'), (1, 'w'), (1, 'M')] %}
+                            <label class="btn btn-default btn-sm">
+                                <input type="radio" name="time-range" value="last:{{ amount }}:{{ unit }}">{{ amount }}{{ unit }}
+                            </label>
+                            {% endfor %}
+                            <label class="btn btn-default btn-sm">
+                                <input type="radio" name="time-range" value="fixed">Fixed time range
                             </label>
                         </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="until-type" value="unix-timestamp">Fixed time
-                                <div class='input-group date' id='until-timestamp' data-date-format="YYYY-MM-DD HH:mm">
-                                    <input type='text' class="form-control" />
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </label>
+                    </div>
+                    <div class="form-group time-range-fixed">
+                        <div class="col-md-2">From</div>
+                        <div class="col-md-9">
+                            <div class="input-group date" id="from-timestamp" data-date-format="YYYY-MM-DD HH:mm:ss">
+                                <input type="text" class="form-control" />
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group time-range-fixed">
+                        <div class="col-md-2">To:</div>
+                        <div class="col-md-9">
+                            <div class="input-group date" id="until-timestamp" data-date-format="YYYY-MM-DD HH:mm:ss">
+                                <input type="text" class="form-control" />
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </fieldset>
             </div>
             <div class="col-md-2">
-                <fieldset>
+            <fieldset>
                     <legend>Categories</legend>
                     <div>(You can scroll the list)</div>
                     <div class="controls category-container">
