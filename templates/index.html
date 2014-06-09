@@ -82,7 +82,6 @@
             <div class="col-md-2">
             <fieldset>
                     <legend>Categories</legend>
-                    <div>(You can scroll the list)</div>
                     <div class="controls category-container">
                         {% for current in categories %}
                         <div class="checkbox">
@@ -112,7 +111,7 @@
                 <fieldset>
                     <legend><a href="#" id="permalink" ng-href="{{ permalink }}">Permalink</a></legend>
                     <div>
-                        <pre id="permalink-code">{{ permalink }}</pre>
+                        <p id="permalink-code">{{ permalink }}</p>
                     </div>
                 </fieldset>
                 {% endraw %}
