@@ -86,12 +86,13 @@ $(function() {
                 return timeRangeChooser.buttonByHoursAgo(hoursAgoInt).click();
             } else {
                 $('input[name=time-range][value=fixed]').click();
+                timeRangeChooser.updateDatetimePickers(hoursAgoInt, untilInt);
             }
             timeRangeChooser.updateDatetimePickers();
         },
-        updateDatetimePickers: function () {
-            var until = timeRangeChooser.getUntil(),
-                hoursAgo = timeRangeChooser.getHoursAgo();
+        updateDatetimePickers: function (hoursAgo, until) {
+            until = until || timeRangeChooser.getUntil();
+            hoursAgo = hoursAgo || timeRangeChooser.getHoursAgo();
             if (until === -1) {
                 until = moment().unix();
             }
