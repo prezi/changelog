@@ -6,17 +6,20 @@
     <link rel="stylesheet" type="text/css" href="/static/style.css">
 </head>
 <body ng-app="changelog.application">
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.16/angular.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/2.0.0/angular-strap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/2.0.0/angular-strap.tpl.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-animate.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.ba-bbq/1.2.1/jquery.ba-bbq.min.js"></script>
+
 <script src="/static/js/changelog.application.js"></script>
 <script src="/static/js/changelog.controllers.js"></script>
 <script src="/static/js/changelog.services.js"></script>
 <script src="/static/js/changelog.directives.js"></script>
+<script src="/static/js/changelog.filters.js"></script>
 <div class="container-fluid">
     <div class="row" ng-controller="InputController">
         <form id="filters" class="form-horizontal">
@@ -138,7 +141,7 @@
                     <td>{{ event.criticality }}</td>
                     <td>{{ event.category }}</td>
                     <td>{{ event.unix_timestamp*1000|date:'yyyy-MM-dd HH:mm:ss' }}</td>
-                    <td>{{ event.description }}</td>
+                    <td ng-bind-html="event.description|unsafeHtml"></td>
                 </tr>
             </tbody>
         </table>
