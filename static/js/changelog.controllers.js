@@ -45,6 +45,18 @@
             $scope.$watch(function () { return $.bbq.getState(); }, applyHash, true);
 
             // Inputs -> Current URL
+            function buildPermalink(state) {
+                var permalinkState = {}, prop;
+                for (prop in state) {
+                    if (state.hasOwnProperty(prop)) {
+                        permalinkState[prop] = state[prop];
+                        if (prop === 'until' && state.until === -1) {
+                            permalinkState.until = moment().unix();
+                        }
+                    }
+                }
+                return $.param.fragment($location.absUrl(), permalinkState);
+            }
             $scope.updateState = function () {
                 var newState = {},
                     state = $.bbq.getState(),
@@ -80,7 +92,7 @@
                         if (newState[field] !== state[field]) {
                             // permalink should be down below in the $scope.$watch, but it fails to update the permalink
                             // when a field is removed
-                            $scope.permalink = $.param.fragment($location.absUrl(), newState);
+                            $scope.permalink = buildPermalink(newState);
                             // state changed, return the new one
                             return newState;
                         }
@@ -93,7 +105,6 @@
                 'updateState()',
                 function (state) {
                     $.bbq.pushState(state, 2);
-                    if (state.until === -1) { state.until = moment().unix(); }
                     ChangelogApi.fetch(state);
                 },
                 true
@@ -109,8 +120,6 @@
             // Time-range - radiobutton
             // buttons -> (until, hoursAgo)
             $scope.timerangeRadio = null;
-            $scope.until = $.bbq.getState('until') || -1;
-            $scope.hoursAgo = $.bbq.getState('hours_ago') || 1;
             $scope.$watch('timerangeRadio', function (value) {
                 if (!value) { return; }
                 var parts = value.split(':');
@@ -118,7 +127,9 @@
                     $scope.until = -1;
                     $scope.hoursAgo = moment.duration(parseInt(parts[1], 10), parts[2]).asHours();
                 } else {
-                    $scope.until = moment().unix();
+                    if ($scope.until === -1) {
+                        $scope.until = moment().unix();
+                    }
                 }
             });
 
