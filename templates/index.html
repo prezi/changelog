@@ -3,38 +3,38 @@
 <head>
     <title>Changelog :)</title>
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" type="text/css" href="/static/style.css">
 </head>
-<body>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.ba-bbq/1.2.1/jquery.ba-bbq.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-hashchange/v1.3/jquery.ba-hashchange.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<body ng-app="changelog.application">
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js"></script>
-<script src="/static/changelog.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.16/angular.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/2.0.0/angular-strap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/2.0.0/angular-strap.tpl.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-animate.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.ba-bbq/1.2.1/jquery.ba-bbq.min.js"></script>
+<script src="/static/js/changelog.application.js"></script>
+<script src="/static/js/changelog.controllers.js"></script>
 <div class="container-fluid">
-    <div class="row">
+    <div class="row" ng-controller="InputController">
         <form id="filters" class="form-horizontal">
             <div class="col-md-2">
                 <fieldset>
                     <legend>Criticality</legend>
                     <div class="form-group">
-                        {% for criticality in range(1,6)|reverse %}
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="criticality" value="{{ criticality }}">
-                                    {{ criticality }}
-                                    {% if criticality == 5 %}(Most critical){% endif %}
-                                    {% if criticality == 1 %}(Least critical){% endif %}
-                                </label>
-                            </div>
-                        {% endfor %}
+                        <div class="checkbox" ng-repeat="criticality in ['5', '4', '3', '2', '1']">
+                            <label>
+                                <input type="checkbox" name="criticality"
+                                       ng-checked="criticalities.isChecked(criticality)"
+                                       ng-click="criticalities.toggle(criticality)">
+                                <span ng-bind="criticality"></span>
+                                <span ng-if="criticality === '5'">(Most critical)</span>
+                                <span ng-if="criticality === '1'">(Least critical)</span>
+                            </label>
+                        </div>
                     </div>
-
                     <div class="form-group">
-                        <button id="clear-criticality-filter" class="btn btn-default" type="button">Show all criticalities</button>
+                        <button class="btn btn-default" type="button" ng-click="criticalities.clear()">Show all criticalities</button>
                     </div>
                 </fieldset>
             </div>
@@ -43,35 +43,33 @@
                 <fieldset>
                     <legend>Time-range</legend>
                     <div class="form-group">
-                        <div class="btn-group" data-toggle="buttons" id="relative-time-ranges">
+                        <div class="btn-group" id="timerange-radio" bs-radio-group ng-model="timerangeRadio">
                             {% for amount, unit in [(1, 'h'), (4, 'h'), (1, 'd'), (1, 'w'), (1, 'M')] %}
                             <label class="btn btn-default btn-sm">
-                                <input type="radio" name="time-range" value="last:{{ amount }}:{{ unit }}">{{ amount }}{{ unit }}
+                                <input type="radio" class="btn btn-default timerange-relative" value="last:{{ amount }}:{{ unit }}">{{ amount }}{{ unit }}
                             </label>
                             {% endfor %}
                             <label class="btn btn-default btn-sm">
-                                <input type="radio" name="time-range" value="fixed">Fixed time range
+                                <input type="radio" class="btn btn-default" value="fixed">Fixed time range
                             </label>
                         </div>
                     </div>
-                    <div class="form-group time-range-fixed">
+                    <div class="form-group time-range-fixed" ng-show="timerangeRadio === 'fixed'">
                         <div class="col-md-2">From</div>
-                        <div class="col-md-9">
-                            <div class="input-group date" id="from-timestamp" data-date-format="YYYY-MM-DD HH:mm:ss">
-                                <input type="text" class="form-control" />
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
+                        <div class="col-md-5">
+                            <input class="form-control" ng-model="fromDate" bs-datepicker date-format="yyyy-MM-dd" autoclose="1">
+                        </div>
+                        <div class="col-md-5">
+                            <input class="form-control" ng-model="fromDate" bs-timepicker data-time-format="HH:mm:ss" autoclose="1">
                         </div>
                     </div>
-                    <div class="form-group time-range-fixed">
-                        <div class="col-md-2">To:</div>
-                        <div class="col-md-9">
-                            <div class="input-group date" id="until-timestamp" data-date-format="YYYY-MM-DD HH:mm:ss">
-                                <input type="text" class="form-control" />
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
+                    <div class="form-group time-range-fixed" ng-show="timerangeRadio === 'fixed'">
+                        <div class="col-md-2">To</div>
+                        <div class="col-md-5">
+                            <input class="form-control" ng-model="toDate" bs-datepicker date-format="yyyy-MM-dd" autoclose="1">
+                        </div>
+                        <div class="col-md-5">
+                            <input class="form-control" ng-model="toDate" bs-timepicker time-format="HH:mm:ss" autoclose="1">
                         </div>
                     </div>
                 </fieldset>
@@ -84,12 +82,15 @@
                         {% for category in categories %}
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" name="category" value="{{category}}">{{category}}
+                                <input type="checkbox" name="category" value="{{category}}"
+                                        ng-checked="categories.isChecked('{{ category }}')"
+                                        ng-click="categories.toggle('{{ category }}')">{{category}}
                             </label>
                         </div>
                         {% endfor %}
                     </div>
-                    <button id="clear-category-filter" class="btn btn-default col-md-12" type="button">Show all categories</button>
+                    <button id="clear-category-filter" class="btn btn-default col-md-12" type="button"
+                            ng-click="categories.clear()">Show all categories</button>
                 </fieldset>
             </div>
             <div class="col-md-3">
@@ -97,20 +98,23 @@
                 <legend>Description</legend>
                 <div class="form-group">
                   Contains:
-                  <input type='text' class="form-control" name="description" style="display:inline; width:80%;">
+                  <input type='text' class="form-control" ng-model="description" style="display:inline; width:80%;">
                 </div>
               </fieldset>
             </div>
             <div class="col-md-5">
-            <fieldset>
-                <legend><a href="#" id="permalink">Permalink</a></legend>
-                <div>
-                    <pre id="permalink-code"></pre>
-                </div>
-            </fieldset>
+                {% raw %}
+                <fieldset>
+                    <legend><a href="#" id="permalink" ng-href="{{ permalink }}">Permalink</a></legend>
+                    <div>
+                        <pre id="permalink-code">{{ permalink }}</pre>
+                    </div>
+                </fieldset>
+                {% endraw %}
             </div>
         </form>
     </div>
+    {% raw %}
     <div class="row-fluid">
         <table id="events" class="table table-bordered table-hover table-condensed">
             <thead>
@@ -125,6 +129,7 @@
             </tbody>
         </table>
     </div>
+{% endraw %}
 </div>
 </body>
 </html>
