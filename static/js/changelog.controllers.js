@@ -21,15 +21,15 @@
     }
 
     angular.module('changelog.controllers', [])
-        .controller('InputController', function ($scope, $location) {
+        .controller('InputController', function ($scope, $location, ChangelogApi) {
 
             // Current URL -> Inputs
             function applyHash() {
                 var state = $.bbq.getState();
-                $scope.criticalities = checkboxList(state.criticality ? state.criticality.split(',') : []);
+                $scope.criticality = checkboxList(state.criticality ? state.criticality.split(',') : []);
                 $scope.hoursAgo = parseInt(state.hours_ago, 10) || 1;
                 $scope.until = parseInt(state.until, 10) || -1;
-                $scope.categories = checkboxList((state.categories ? state.categories.split(',') : []));
+                $scope.category = checkboxList((state.category ? state.category.split(',') : []));
                 $scope.description = state.description || '';
                 if ($scope.until === -1) {
                     // ng-repeat doesn't work inside bs-radio-group, so we need to do generate the list with Jinja
@@ -46,28 +46,55 @@
 
             // Inputs -> Current URL
             $scope.updateState = function () {
-                var newData = {
-                    criticality: $scope.criticalities.sort().join(','),
-                    hours_ago: $scope.hoursAgo,
-                    until: $scope.until,
-                    categories: $scope.categories.sort().join(','),
-                    description: $scope.description
-                }, state = $.bbq.getState(), prop;
-                for (prop in newData) {
-                    if (newData.hasOwnProperty(prop)) {
-                        if (newData[prop] !== state[prop]) {
-                            return newData;
+                var newState = {},
+                    state = $.bbq.getState(),
+                    same = undefined,
+                    // field name in the api -> field name in $scope
+                    fields = {
+                        criticality: same,
+                        hours_ago: 'hoursAgo',
+                        until: same,
+                        category: same,
+                        description: same
+                    },
+                    field;
+                function set(key, scopeKey) {
+                    // Copy from $scope to newState if set, sorting and joining arrays
+                    var value = $scope[scopeKey || key];
+                    if (value === undefined || value.length === 0) { return; }
+                    if (value instanceof Array) {
+                        newState[key] = value.join(',');
+                    } else {
+                        newState[key] = value;
+                    }
+                }
+                // Build hash describing current filters
+                for (field in fields) {
+                    if (fields.hasOwnProperty(field)) {
+                        set(field, fields[field]);
+                    }
+                }
+                // Check state for change
+                for (field in fields) {
+                    if (fields.hasOwnProperty(field)) {
+                        if (newState[field] !== state[field]) {
+                            // permalink should be down below in the $scope.$watch, but it fails to update the permalink
+                            // when a field is removed
+                            $scope.permalink = $.param.fragment($location.absUrl(), newState);
+                            // state changed, return the new one
+                            return newState;
                         }
                     }
                 }
-                return $scope.state;
+                // No changes, return the original state
+                return state;
             };
             $scope.$watch(
                 'updateState()',
                 function (state) {
-                    $.bbq.pushState(state);
+                    $.bbq.pushState(state, 2);
                     if (state.until === -1) { state.until = moment().unix(); }
-                    $scope.permalink = $.param.fragment($location.absUrl(), state);
+                    ChangelogApi.fetch(state);
                 },
                 true
             );
@@ -76,8 +103,8 @@
             applyHash();
 
             // Checkboxes -> list
-            checkboxList($scope.criticalities);
-            checkboxList($scope.categories);
+            checkboxList($scope.criticality);
+            checkboxList($scope.category);
 
             // Time-range - radiobutton
             // buttons -> (until, hoursAgo)
@@ -105,5 +132,14 @@
             // (fromDate, toDate) -> (until, hoursAgo)
             $scope.$watch('fromDate', function (fromDate) { $scope.hoursAgo = moment($scope.toDate).diff(fromDate, 'hours'); });
             $scope.$watch('toDate', function (toDate) { $scope.until = moment(toDate).unix(); });
+        })
+
+        .controller('EventListController', function ($scope, ChangelogApi) {
+            $scope.loading = false;
+            ChangelogApi.loading(function () { $scope.loading = true; });
+            ChangelogApi.success(function (events) {
+                $scope.events = events;
+                $scope.loading = false;
+            });
         });
 }());

@@ -15,6 +15,8 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.ba-bbq/1.2.1/jquery.ba-bbq.min.js"></script>
 <script src="/static/js/changelog.application.js"></script>
 <script src="/static/js/changelog.controllers.js"></script>
+<script src="/static/js/changelog.services.js"></script>
+<script src="/static/js/changelog.directives.js"></script>
 <div class="container-fluid">
     <div class="row" ng-controller="InputController">
         <form id="filters" class="form-horizontal">
@@ -22,14 +24,14 @@
                 <fieldset>
                     <legend>Criticality</legend>
                     <div class="form-group">
-                        <div class="checkbox" ng-repeat="criticality in ['5', '4', '3', '2', '1']">
+                        <div class="checkbox" ng-repeat="current in ['5', '4', '3', '2', '1']">
                             <label>
                                 <input type="checkbox" name="criticality"
-                                       ng-checked="criticalities.isChecked(criticality)"
-                                       ng-click="criticalities.toggle(criticality)">
-                                <span ng-bind="criticality"></span>
-                                <span ng-if="criticality === '5'">(Most critical)</span>
-                                <span ng-if="criticality === '1'">(Least critical)</span>
+                                       ng-checked="criticality.isChecked(current)"
+                                       ng-click="criticality.toggle(current)">
+                                <span ng-bind="current"></span>
+                                <span ng-if="current === '5'">(Most critical)</span>
+                                <span ng-if="current === '1'">(Least critical)</span>
                             </label>
                         </div>
                     </div>
@@ -79,18 +81,18 @@
                     <legend>Categories</legend>
                     <div>(You can scroll the list)</div>
                     <div class="controls category-container">
-                        {% for category in categories %}
+                        {% for current in categories %}
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" name="category" value="{{category}}"
-                                        ng-checked="categories.isChecked('{{ category }}')"
-                                        ng-click="categories.toggle('{{ category }}')">{{category}}
+                                <input type="checkbox" name="category" value="{{current}}"
+                                        ng-checked="category.isChecked('{{ current }}')"
+                                        ng-click="category.toggle('{{ current }}')">{{current}}
                             </label>
                         </div>
                         {% endfor %}
                     </div>
                     <button id="clear-category-filter" class="btn btn-default col-md-12" type="button"
-                            ng-click="categories.clear()">Show all categories</button>
+                            ng-click="category.clear()">Show all categories</button>
                 </fieldset>
             </div>
             <div class="col-md-3">
@@ -98,7 +100,7 @@
                 <legend>Description</legend>
                 <div class="form-group">
                   Contains:
-                  <input type='text' class="form-control" ng-model="description" style="display:inline; width:80%;">
+                  <input type='text' class="form-control" ng-model="description" style="display:inline; width:80%;" ng-debounce>
                 </div>
               </fieldset>
             </div>
@@ -115,8 +117,14 @@
         </form>
     </div>
     {% raw %}
-    <div class="row-fluid">
-        <table id="events" class="table table-bordered table-hover table-condensed">
+    <div class="row-fluid" ng-controller="EventListController">
+        <div ng-show="loading" class="col-md-offset-5">
+            <h3>
+                <i class="glyphicon glyphicon-refresh"></i>
+                Loading...
+            </h3>
+        </div>
+        <table id="events" class="table table-bordered table-hover table-condensed" ng-show="!loading">
             <thead>
             <tr>
                 <th>Criticality</th>
@@ -126,10 +134,16 @@
             </tr>
             </thead>
             <tbody>
+                <tr ng-repeat="event in events">
+                    <td>{{ event.criticality }}</td>
+                    <td>{{ event.category }}</td>
+                    <td>{{ event.unix_timestamp*1000|date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                    <td>{{ event.description }}</td>
+                </tr>
             </tbody>
         </table>
     </div>
-{% endraw %}
+    {% endraw %}
 </div>
 </body>
 </html>
