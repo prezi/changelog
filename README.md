@@ -23,6 +23,9 @@ curl http://changelog.awesomecompany.com/api/events \
 
 All four JSON fields are required, and there are no other fields the server understands.
 
+Clients implementing this logic (more to come):
+ - bash: https://github.com/prezi/changelog-client-bash
+
 Some ideas for events to send:
  - deployment, release
  - feature (switch|flag|toggle) changes
