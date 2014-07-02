@@ -26,6 +26,7 @@ All four JSON fields are required, and there are no other fields the server unde
 Clients implementing this logic (more to come):
  - bash: https://github.com/prezi/changelog-client-bash
  - python: https://github.com/woohgit/changelog-client-python
+ - ruby: https://github.com/woohgit/changelog_client
 
 Some ideas for events to send:
  - deployment, release
