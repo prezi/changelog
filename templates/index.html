@@ -22,7 +22,13 @@
 <script src="/static/js/changelog.filters.js"></script>
 <div class="container-fluid">
     <div class="row" ng-controller="InputController">
-        <form id="filters" class="form-horizontal">
+        <div ng-show="isDashboard">
+            <div class="autorefresh-progress" ng-controller="AutorefreshController">
+                <span ng-style="{width: percent + '%'}"></span>
+            </div>
+            {{ percent }}
+        </div>
+        <form id="filters" class="form-horizontal" ng-show="!isDashboard">
             <div class="col-md-2">
                 <fieldset>
                     <legend>Criticality</legend>
@@ -113,6 +119,7 @@
                     <div>
                         <p id="permalink-code">{{ permalink }}</p>
                     </div>
+                    <button class="btn btn-default" ng-click="isDashboard = 1">Dashboard view</button>
                 </fieldset>
                 {% endraw %}
             </div>

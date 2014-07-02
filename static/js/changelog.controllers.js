@@ -31,6 +31,7 @@
                 $scope.until = parseInt(state.until, 10) || -1;
                 $scope.category = checkboxList((state.category ? state.category.split(',') : []));
                 $scope.description = state.description || '';
+                $scope.isDashboard = parseInt(state.is_dashboard, 10) || 0;
                 if ($scope.until === -1) {
                     // ng-repeat doesn't work inside bs-radio-group, so we need to do generate the list with Jinja
                     // and do this manually
@@ -67,13 +68,14 @@
                         hours_ago: 'hoursAgo',
                         until: same,
                         category: same,
-                        description: same
+                        description: same,
+                        is_dashboard: 'isDashboard'
                     },
                     field;
                 function set(key, scopeKey) {
                     // Copy from $scope to newState if set, sorting and joining arrays
                     var value = $scope[scopeKey || key];
-                    if (value === undefined || value.length === 0) { return; }
+                    if (value === undefined || value.length === 0 || value === 0) { return; }
                     if (value instanceof Array) {
                         newState[key] = value.join(',');
                     } else {
@@ -152,5 +154,24 @@
                 $scope.events = events;
                 $scope.loading = false;
             });
+        })
+
+        .controller('AutorefreshController', function ($scope, $interval, ChangelogApi) {
+            var refreshInterval = 10000,
+                stepGranularity = 100,
+                elapsed = 0,
+                intervalId;
+            $scope.percent = 0;
+            intervalId = $interval(function () {
+                elapsed += stepGranularity;
+                $scope.percent = (elapsed / refreshInterval) * 100;
+                if (elapsed >= refreshInterval) {
+                    if ($scope.isDashboard) {
+                        ChangelogApi.fetch($.bbq.getState());
+                    }
+                    elapsed = 0;
+                    $scope.percent = 0;
+                }
+            }, stepGranularity);
         });
 }());

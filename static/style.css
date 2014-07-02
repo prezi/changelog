@@ -13,6 +13,19 @@ input[name=hours-ago] {
     padding: 3px
 }
 
+.autorefresh-progress {
+    height: 3px;
+    position: relative;
+}
+
+.autorefresh-progress > span {
+    display: block;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    background-color: red;
+}
+
 /* https://github.com/mgcrea/angular-strap/issues/398 */
 .datepicker.dropdown-menu {
     width: 250px;
