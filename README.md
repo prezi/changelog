@@ -39,7 +39,7 @@ Some ideas for events to send:
 ## Getting started
 
 #### Prerequisites
- - sqlite3
+ - a relational database
  - python 2
  - virtualenv
  - optionally: a [Sentry](https://getsentry.com/) server for collecting exceptions; not that there'll be any :)
@@ -81,7 +81,7 @@ Values you can set:
 
 | Variable      | Description                                                                      | Default        |
 |---------------|----------------------------------------------------------------------------------|----------------|
-| `DB_PATH`     | Path to the sqlite3 database file.                                               |`/opt/changelog/changelog.db`  |
+| `ALCHEMY_URL`     | SQL Alchemy connection string.                                               |`sqlite:///changelog.db`  |
 | `LISTEN_HOST` | IP address where the application will listen when started with `python application.py`.| `127.0.0.1`         |
 | `LISTEN_PORT` | Port where the application will listen when started with `python application.py`.| `5000`         |
 | `USE_SENTRY`  | Send exceptions to Sentry?                                                       | `False`        |
@@ -96,7 +96,6 @@ The default configuration values are in [settings.py](settings.py).
  - No authentication is provided, you'll probably want to put some authenticating proxy in front of this application.
    Pull requests for adding authentication support are of course welcome.
  - Similarly, no HTTPS termination is provided. Ideally the WSGI container will take care of that.
- - If you plan to send a ton of events, sqlite will probably soon become a bottleneck.
 
 ## Contributing
 
@@ -109,6 +108,7 @@ but because the application is almost trivial. Please make sure you also update 
  - Roy Rapoport (@royrapoport) for inspiring this tool with his talk at the
    [SF Metrics Meetup](http://blog.librato.com/posts/2013/6/12/sf-metrics-meetup-change-reporting-and-building-metrics-from-log-data)
  - Ryan Bowlby (@rbowlby)
+ - Bálint Csergő (@deathowl) for adding SQLAlchemy support
 
 ## Awesome tools used
 These tools made it possible to write `changelog` in a weekend. Huge thanks.
@@ -124,6 +124,8 @@ These tools made it possible to write `changelog` in a weekend. Huge thanks.
   for making the permalink simple to implement
 - [Sentry](http://getsentry.com/) for simple-to-use, awesome error reporting / collection / aggregation
 - [cdnjs](http://cdnjs.com/) for hosting all the client-side libraries above
+- [SQLAlchemy](http://www.sqlalchemy.org/) 
+- [Flask-SQLAlchemy](https://github.com/mitsuhiko/flask-sqlalchemy) SQLAlchemy support for Flask
 - Those that we take for granted: sqlite3, python, virtualenv, and the list goes on...
 
 <hr>

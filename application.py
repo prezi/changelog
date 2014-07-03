@@ -3,8 +3,10 @@ from flask import Flask, render_template
 from flask.ext.restful import reqparse, Api, Resource
 from raven.contrib.flask import Sentry
 from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy import Table, Column, distinct, select
 from sqlalchemy.exc import IntegrityError
 import settings
+from sqlalchemy.ext.declarative import declarative_base
 
 app = Flask(__name__)
 
@@ -33,15 +35,21 @@ query_parser.add_argument('until', type=int)
 query_parser.add_argument('category', type=unicode)
 query_parser.add_argument('description', type=unicode)
 
+Base = declarative_base()
+events = Table('events', Base.metadata,
+               Column('criticality', db.Integer, index=True),
+               Column('unix_timestamp', db.Integer, index=True),
+               Column('category', db.String(30), index=True),
+               Column('description', db.String(1000), index=True)
+               )
+
 
 class Event(db.Model):
-    __tablename__ = 'events'
-    id = db.Column(db.Integer, primary_key=True)
-    criticality = db.Column(db.Integer)
-    unix_timestamp = db.Column(db.Integer)
-    category = db.Column(db.String(30))
-    description = db.Column(db.String(1000))
-
+    __table__ = events
+    __mapper_args__ = {
+        'primary_key': [events.c.criticality, events.c.unix_timestamp,
+                        events.c.category, events.c.description]
+    }
     def __init__(self, criticality, unix_timestamp, category, description):
         self.criticality = criticality
         self.unix_timestamp = unix_timestamp
@@ -52,25 +60,25 @@ class Event(db.Model):
 class EventList(Resource):
     def get(self):
         query = query_parser.parse_args()
-        result = db.session.query(Event)
+        db_query = db.session.query(Event)
         # time
         if query['until'] != -1:
-            result = result.filter(Event.unix_timestamp >= query['until'] - query['hours_ago'] * 3600)
-            result = result.filter(Event.unix_timestamp <= query['until'])
+            db_query = db_query.filter(Event.unix_timestamp >= query['until'] - query['hours_ago'] * 3600)
+            db_query = db_query.filter(Event.unix_timestamp <= query['until'])
         else:
-            result = result.filter(Event.unix_timestamp >= time.time() - query['hours_ago'] * 3600)
+            db_query = db_query.filter(Event.unix_timestamp >= time.time() - query['hours_ago'] * 3600)
         # criticality
         if query['criticality'] is not None:
             criticality = map(int, query['criticality'].split(','))
-            result = result.filter(Event.criticality.in_(criticality))
+            db_query = db_query.filter(Event.criticality.in_(criticality))
         #category
         if query['category'] is not None:
             category = query['category'].split(',')
-            result = result.filter(Event.category.in_(category))
+            db_query = db_query.filter(Event.category.in_(category))
         # description
         if query['description'] is not None:
-            result = result.filter(Event.description.like("%%"+query['description']+"%%"))
-        result = result.order_by(Event.unix_timestamp.desc()).all()
+            db_query = db_query.filter(Event.description.like("%%%s%%" % query['description']))
+        result = db_query.order_by(Event.unix_timestamp.desc()).all()
         converted = [
             {"criticality": r.criticality,
              "unix_timestamp": r.unix_timestamp,
@@ -81,7 +89,7 @@ class EventList(Resource):
     def post(self):
         json = json_parser.parse_args()
         try:
-            ev = Event(json['criticality'], json['unix_timestamp'], json['description'], json['category'])
+            ev = Event(json['criticality'], json['unix_timestamp'], json['category'], json['description'])
             db.session.add(ev)
             db.session.commit()
 
@@ -96,7 +104,8 @@ api.add_resource(EventList, '/api/events')
 
 @app.route('/')
 def index():
-    categories =[str(entry[0]) for entry in db.engine.execute('select distinct category from events').fetchall()]
+    statement = select([distinct(events.c.category)])
+    categories = [str(entry[0]) for entry in db.engine.execute(statement).fetchall()]
     return render_template('index.html', categories=categories)
 
 
