@@ -3,7 +3,6 @@ from flask import Flask, render_template
 from flask.ext.restful import reqparse, Api, Resource
 from raven.contrib.flask import Sentry
 from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy import UniqueConstraint
 from sqlalchemy.exc import IntegrityError
 import settings
 
