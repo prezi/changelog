@@ -1,4 +1,5 @@
 CREATE TABLE events (
+    id INTEGER PRIMARY KEY,
     criticality INTEGER NOT NULL,
     unix_timestamp INTEGER NOT NULL,
     category VARCHAR NOT NULL,
