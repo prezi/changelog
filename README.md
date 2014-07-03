@@ -108,6 +108,7 @@ but because the application is almost trivial. Please make sure you also update 
 
  - Roy Rapoport (@royrapoport) for inspiring this tool with his talk at the
    [SF Metrics Meetup](http://blog.librato.com/posts/2013/6/12/sf-metrics-meetup-change-reporting-and-building-metrics-from-log-data)
+ - Zoltan Nagy (@abesto): initial implementation, current maintainer
  - Ryan Bowlby (@rbowlby)
 
 ## Awesome tools used
