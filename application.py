@@ -42,6 +42,7 @@ events = Table('events', Base.metadata,
                Column('category', db.String(30), index=True),
                Column('description', db.String(1000), index=True)
                )
+Base.metadata.create_all(db.engine)
 
 
 class Event(db.Model):
