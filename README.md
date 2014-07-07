@@ -120,6 +120,7 @@ but because the application is almost trivial. Please make sure you also update 
  - Zoltan Nagy (@abesto): initial implementation, current maintainer
  - Ryan Bowlby (@rbowlby)
  - Bálint Csergő (@deathowl) for adding SQLAlchemy support
+ - Charles Hooper (@chooper)
 
 ## Awesome tools used
 These tools made it possible to write `changelog` in a weekend. Huge thanks.
