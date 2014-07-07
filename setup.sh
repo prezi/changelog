@@ -3,7 +3,15 @@
 . virtualenv/bin/activate
 pip install -r requirements.txt
 
-echo "All done. You can now start the application with"
-echo ". virtualenv/bin/activate; python application.py"
-echo
-echo "In production, point a WSGI server at application.wsgi"
+cat <<EOF
+
+All done. You can now start the application with
+. virtualenv/bin/activate; python application.py
+
+In production, point a WSGI server at application.wsgi
+
+You may want to install a database client binding after
+activating the virtualenv.
+ - MySQL: pip install -r requirements-mysql.txt
+ - PostgreSQL: pip install -r requirements-postgresql.txt
+EOF

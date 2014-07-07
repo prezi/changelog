@@ -65,6 +65,16 @@ cd changelog
 python application.py
 ```
 
+#### Database support
+
+Changelog uses SQLAlchemy to support a wide range of databases. The client library bindings are not included in
+`requirements.txt` to make setup possible in the absence of client libraries on the system. If you want to use
+a database other than SQLite (you should), then you'll need to manually install the python bindings. Additional
+requirements files are provided to install known good versions of the bindings:
+
+ - MySQL: `pip install -r requirements-mysql.txt`
+ - PostgreSQL: `pip install -r requirements-postgresql.txt`
+
 ## Configuration
 
 You can set the environment variable `CHANGELOG_SETTINGS_PATH` to point to a python file. That file can set the values detailed
