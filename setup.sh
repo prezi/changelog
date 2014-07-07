@@ -3,9 +3,6 @@
 . virtualenv/bin/activate
 pip install -r requirements.txt
 
-echo "Creating database"
-sqlite3 changelog.db < schema.sql
-
 echo "All done. You can now start the application with"
 echo ". virtualenv/bin/activate; python application.py"
 echo
