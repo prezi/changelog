@@ -58,7 +58,7 @@
                 }
                 return $.param.fragment($location.absUrl(), permalinkState);
             }
-            $scope.updateState = function () {
+            $scope.updateState = function (forceUpdate) {
                 var newState = {},
                     state = $.bbq.getState(),
                     same = undefined,
@@ -71,7 +71,8 @@
                         description: same,
                         is_dashboard: 'isDashboard'
                     },
-                    field;
+                    field,
+                    shouldUpdate = !!forceUpdate;
                 function set(key, scopeKey) {
                     // Copy from $scope to newState if set, sorting and joining arrays
                     var value = $scope[scopeKey || key];
@@ -88,17 +89,29 @@
                         set(field, fields[field]);
                     }
                 }
+                function maybeParseInt(field, v) {
+                    if (field === 'hours_ago' || field === 'until') {
+                        return parseInt(v, 10);
+                    }
+                    return v;
+                }
                 // Check state for change
                 for (field in fields) {
                     if (fields.hasOwnProperty(field)) {
-                        if (newState[field] !== state[field]) {
-                            // permalink should be down below in the $scope.$watch, but it fails to update the permalink
-                            // when a field is removed
-                            $scope.permalink = buildPermalink(newState);
-                            // state changed, return the new one
-                            return newState;
+                        var oldValue = maybeParseInt(field, state[field]),
+                            newValue = maybeParseInt(field, newState[field]);
+                        if (newValue !== oldValue) {
+                            shouldUpdate = true;
                         }
                     }
+                }
+
+                if (shouldUpdate) {
+                    // permalink should be down below in the $scope.$watch, but it fails to update the permalink
+                    // when a field is removed
+                    $scope.permalink = buildPermalink(newState);
+                    // state changed, return the new one
+                    return newState;
                 }
                 // No changes, return the original state
                 return state;
@@ -114,6 +127,7 @@
 
             // Initial load from hash when loading the page
             applyHash();
+            $scope.updateState(true);
 
             // Checkboxes -> list
             checkboxList($scope.criticality);
