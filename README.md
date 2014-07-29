@@ -28,6 +28,7 @@ Clients implementing this logic (more to come):
  - python: https://github.com/woohgit/changelog-client-python
  - ruby: https://github.com/woohgit/changelog_client
  - php: https://github.com/Gerifield/changelog-client-php
+ - jvm: https://github.com/prezi/changelog-client-java
 
 Some ideas for events to send:
  - deployment, release
