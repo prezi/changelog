@@ -108,6 +108,7 @@ The default configuration values are in [settings.py](settings.py).
  - No authentication is provided, you'll probably want to put some authenticating proxy in front of this application.
    Pull requests for adding authentication support are of course welcome.
  - Similarly, no HTTPS termination is provided. Ideally the WSGI container will take care of that.
+ - Once you have a good number of events, enabling response compression (think `mod_deflate`) can speed things up.
 
 ## Contributing
 
