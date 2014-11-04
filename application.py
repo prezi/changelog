@@ -102,6 +102,19 @@ class EventList(Resource):
 
 api.add_resource(EventList, '/api/events')
 
+# Healthcheck, supposing that there is at least one element in the database.
+@app.route('/healthcheck')
+def healthcheck():
+    try:
+        db_query = db.session.query(Event)
+        db_query = db_query.limit(1)
+        result = db_query.all()
+        if (len(result) == 0):
+            return "1 FAIL: No record is found in the database."
+        else:
+            return "0 OK: There is at least one record in the database."
+    except Exception, e:
+        return ("1 FAIL: Some exception occured:\n %s" % str(e))
 
 @app.route('/')
 def index():
