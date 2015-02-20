@@ -23,7 +23,7 @@ curl http://changelog.awesomecompany.com/api/events \
 
 All four JSON fields are required, and there are no other fields the server understands.
 
-Clients implementing this logic (more to come):
+Clients implementing this logic:
  - bash: https://github.com/prezi/changelog-client-bash
  - python: https://github.com/woohgit/changelog-client-python
  - ruby: https://github.com/woohgit/changelog_client
