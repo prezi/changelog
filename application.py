@@ -7,6 +7,7 @@ from sqlalchemy import Table, Column, distinct, select
 from sqlalchemy.exc import IntegrityError
 import settings
 from sqlalchemy.ext.declarative import declarative_base
+from flask.ext.cors import CORS
 
 app = Flask(__name__)
 
@@ -21,6 +22,7 @@ except AttributeError:
 
 api = Api(app)
 db = SQLAlchemy(app)
+cors = CORS(app)
 
 json_parser = reqparse.RequestParser()
 json_parser.add_argument('criticality', type=int, required=True, location='json')
