@@ -22,7 +22,7 @@ except AttributeError:
 
 api = Api(app)
 db = SQLAlchemy(app)
-cors = CORS(app)
+cors = CORS(app, resources={r"/api/events": {"origins": r"^http(s)?:dashboard\.prezi\.com"}}, supports_credentials=true)
 
 json_parser = reqparse.RequestParser()
 json_parser.add_argument('criticality', type=int, required=True, location='json')
