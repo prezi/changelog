@@ -22,7 +22,7 @@ except AttributeError:
 
 api = Api(app)
 db = SQLAlchemy(app)
-cors = CORS(app)
+cors = CORS(app, supports_credentials=True)
 
 json_parser = reqparse.RequestParser()
 json_parser.add_argument('criticality', type=int, required=True, location='json')
