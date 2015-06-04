@@ -51,7 +51,7 @@ configuration variables.
 To try it out with an in-container SQLite database:
 
 ```sh
-sudo docker run -it prezi/changelog
+sudo docker run -p 5000:5000 -it prezi/changelog
 ```
 
 Or to try it with a PostgreSQL database:
