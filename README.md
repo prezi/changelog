@@ -54,21 +54,6 @@ To try it out with an in-container SQLite database:
 sudo docker run -p 5000:5000 -it prezi/changelog
 ```
 
-Or to try it with a PostgreSQL database:
-
-```sh
-sudo docker run -d --name changelog-db postgres
-sudo docker run --rm --link changelog-db:db postgres psql -h db -U postgres -c 'CREATE DATABASE changelog'
-sudo docker run -it -p 5000:5000 --link changelog-db:db -e ALCHEMY_URL=postgres://postgres@db/changelog prezi/changelog
-```
-
-Additionally you can set the following environment variables specific to running in Docker:
-
-| Variable                | Description                                      | Default |
-|-------------------------|--------------------------------------------------|---------|
-| `GUNICORN_WORKER_COUNT` | Number of worker processes started by Gunicorn.  | `2`     |
-
-
 ### Setup - Manually
 
 Prerequisites:
@@ -98,6 +83,37 @@ requirements files are provided to install known good versions of the bindings:
 
 ## Configuration
 
+### Variables
+
+| Variable      | Description                                                                      | Default        |
+|---------------|----------------------------------------------------------------------------------|----------------|
+| `ALCHEMY_URL` | SQL Alchemy connection string.                                                   |`sqlite:///changelog.db`  |
+| `LISTEN_HOST` | IP address where the application will listen when started with `python application.py`.| `127.0.0.1` (`0.0.0.0` in Docker)        |
+| `LISTEN_PORT` | Port where the application will listen when started with `python application.py`.| `5000`         |
+| `USE_SENTRY`  | Send exceptions to Sentry?                                                       | `False`        |
+| `SENTRY_DSN`  | Sentry DSN, used only if `USE_SENTRY` is `True`.                                 | `None`         |
+
+The default configuration values defined are in [settings.py](settings.py).
+
+### With Docker
+
+You can pass in any of these variables as an environment variable to the Docker container. Additional, docker-specific variables:
+
+| Variable                | Description                                      | Default |
+|-------------------------|--------------------------------------------------|---------|
+| `GUNICORN_WORKER_COUNT` | Number of worker processes started by Gunicorn.  | `2`     |
+
+For example, to use a PostgreSQL database:
+
+```sh
+sudo docker run -d --name changelog-db postgres
+sudo docker run --rm --link changelog-db:db postgres psql -h db -U postgres -c 'CREATE DATABASE changelog'
+sudo docker run -it -p 5000:5000 --link changelog-db:db -e ALCHEMY_URL=postgres://postgres@db/changelog prezi/changelog
+```
+
+
+### Without Docker
+
 You can set the environment variable `CHANGELOG_SETTINGS_PATH` to point to a python file. That file can set the values detailed
 below. The application prints the final configuration at startup to make debugging this easier (not that there's anything
 to debug, but configuration always needs debugging). The file pointed to by `CHANGELOG_SETTINGS_PATH` can, for example,
@@ -108,17 +124,6 @@ LISTEN_PORT = 8080
 ALCHEMY_URL = 'sqlite:////opt/foo/bar/local/changelog.db'
 ```
 
-Values you can set:
-
-| Variable      | Description                                                                      | Default        |
-|---------------|----------------------------------------------------------------------------------|----------------|
-| `ALCHEMY_URL`     | SQL Alchemy connection string.                                               |`sqlite:///changelog.db`  |
-| `LISTEN_HOST` | IP address where the application will listen when started with `python application.py`.| `127.0.0.1` (`0.0.0.0` in Docker)        |
-| `LISTEN_PORT` | Port where the application will listen when started with `python application.py`.| `5000`         |
-| `USE_SENTRY`  | Send exceptions to Sentry?                                                       | `False`        |
-| `SENTRY_DSN`  | Sentry DSN, used only if `USE_SENTRY` is `True`.                                 | `None`         |
-
-The default configuration values are in [settings.py](settings.py).
 
 ## Considerations for running in production
 
