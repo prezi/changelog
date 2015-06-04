@@ -1,11 +1,15 @@
 FROM ubuntu:14.04
 
-RUN apt-get update
-RUN apt-get install -y python python-dev python-virtualenv sqlite3
-
+WORKDIR /opt/changelog
 ADD . /opt/changelog
-RUN cd /opt/changelog && ./setup.sh
 
-RUN /opt/changelog/virtualenv/bin/pip install gunicorn eventlet
+RUN apt-get update && \
+    apt-get install -y python python-dev python-virtualenv \
+                       sqlite3 \
+                       libmysqlclient-dev mysql-client \
+                       libpq-dev && \
+    apt-get clean && \
+    /opt/changelog/setup.sh && \
+    /opt/changelog/virtualenv/bin/pip install -r requirements-mysql.txt -r requirements-postgres.txt gunicorn eventlet
 
-CMD cd /opt/changelog && /opt/changelog/virtualenv/bin/gunicorn -w 2 -k eventlet -b 0.0.0.0:8000 application:app
+CMD /opt/changelog/run.sh

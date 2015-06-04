@@ -40,25 +40,44 @@ Some ideas for events to send:
 
 ## Getting started
 
-#### Prerequisites
+### Setup - Docker
+
+A public image is available at [prezi/changelog](https://registry.hub.docker.com/u/prezi/changelog).
+It runs `changelog` on Gunicorn with Eventlet workers, and supports SQLite, MySQL and PostgreSQL.
+It's not completely production-ready out of the box, see below - you should think about at least SSL termination and authentication.
+You can set any of the configuration variables described below as environment variables on the container with the same name as the
+configuration variables.
+
+To try it out with an in-container SQLite database:
+
+```sh
+sudo docker run -it prezi/changelog
+```
+
+Or to try it with a PostgreSQL database:
+
+```sh
+sudo docker run -d --name changelog-db postgres
+sudo docker run --rm --link changelog-db:db postgres psql -h db -U postgres -c 'CREATE DATABASE changelog'
+sudo docker run -it -p 5000:5000 --link changelog-db:db -e ALCHEMY_URL=postgres://postgres@db/changelog prezi/changelog
+```
+
+Additionally you can set the following environment variables specific to running in Docker:
+
+| Variable                | Description                                      | Default |
+|-------------------------|--------------------------------------------------|---------|
+| `GUNICORN_WORKER_COUNT` | Number of worker processes started by Gunicorn.  | `2`     |
+
+
+### Setup - Manually
+
+Prerequisites:
+
  - a relational database
  - python 2
  - virtualenv
  - optionally: a [Sentry](https://getsentry.com/) server for collecting exceptions; not that there'll be any :)
 
-#### Setup - Docker
-
-A public image may be coming up. Until then:
-
-```sh
-sudo docker build -t changelog .
-sudo docker run -d -p 80:8000 changelog
-```
-
-Watch out: with the current Dockerfile, upgrading the application in the container will erase the database. It may not
-be a huge issue if you don't want to keep a long history, but keep it in mind.
-
-#### Setup - Manually
 ```sh
 git clone https://github.com/prezi/changelog.git
 cd changelog
@@ -67,9 +86,9 @@ cd changelog
 python application.py
 ```
 
-#### Database support
+### Database support
 
-Changelog uses SQLAlchemy to support a wide range of databases. The client library bindings are not included in
+`changelog` uses SQLAlchemy to support a wide range of databases. The client library bindings are not included in
 `requirements.txt` to make setup possible in the absence of client libraries on the system. If you want to use
 a database other than SQLite (you should), then you'll need to manually install the python bindings. Additional
 requirements files are provided to install known good versions of the bindings:
@@ -94,7 +113,7 @@ Values you can set:
 | Variable      | Description                                                                      | Default        |
 |---------------|----------------------------------------------------------------------------------|----------------|
 | `ALCHEMY_URL`     | SQL Alchemy connection string.                                               |`sqlite:///changelog.db`  |
-| `LISTEN_HOST` | IP address where the application will listen when started with `python application.py`.| `127.0.0.1`         |
+| `LISTEN_HOST` | IP address where the application will listen when started with `python application.py`.| `127.0.0.1` (`0.0.0.0` in Docker)        |
 | `LISTEN_PORT` | Port where the application will listen when started with `python application.py`.| `5000`         |
 | `USE_SENTRY`  | Send exceptions to Sentry?                                                       | `False`        |
 | `SENTRY_DSN`  | Sentry DSN, used only if `USE_SENTRY` is `True`.                                 | `None`         |
@@ -104,7 +123,7 @@ The default configuration values are in [settings.py](settings.py).
 ## Considerations for running in production
 
  - Running under a WSGI server is highly recommended. This project uses the Flask framework, see their documentation for
-   running under [Apache](http://flask.pocoo.org/docs/deploying/mod_wsgi/) or [Standalone WSGI containers](http://flask.pocoo.org/docs/deploying/wsgi-standalone/)
+   running under [Apache](http://flask.pocoo.org/docs/deploying/mod_wsgi/) or [Standalone WSGI containers](http://flask.pocoo.org/docs/deploying/wsgi-standalone/) (Uses Gunicorn with Eventlet workers in the provided Docker image)
  - No authentication is provided, you'll probably want to put some authenticating proxy in front of this application.
    Pull requests for adding authentication support are of course welcome.
  - Similarly, no HTTPS termination is provided. Ideally the WSGI container will take care of that.
@@ -139,7 +158,7 @@ These tools made it possible to write `changelog` in a weekend. Huge thanks.
   for making the permalink simple to implement
 - [Sentry](http://getsentry.com/) for simple-to-use, awesome error reporting / collection / aggregation
 - [cdnjs](http://cdnjs.com/) for hosting all the client-side libraries above
-- [SQLAlchemy](http://www.sqlalchemy.org/) 
+- [SQLAlchemy](http://www.sqlalchemy.org/)
 - [Flask-SQLAlchemy](https://github.com/mitsuhiko/flask-sqlalchemy) SQLAlchemy support for Flask
 - Those that we take for granted: sqlite3, python, virtualenv, and the list goes on...
 
@@ -148,4 +167,3 @@ These tools made it possible to write `changelog` in a weekend. Huge thanks.
 ![Changelog](docs/changelog.jpg)
 
 <sup>Image gleefully copied from [Android Police](http://www.androidpolice.com/2011/03/07/cyanogenmod-7-rc2-rolling-out-now-packing-android-2-3-3-new-features-bugfixes/)</sup>
-
