@@ -42,7 +42,7 @@ Some ideas for events to send:
 
 ### Setup - Docker
 
-A public image is available at [prezi/changelog](https://registry.hub.docker.com/u/prezi/changelog).
+A public image is available at [prezi/changelog](https://hub.docker.com/r/prezi/changelog/).
 It runs `changelog` on Gunicorn with Eventlet workers, and supports SQLite, MySQL and PostgreSQL.
 It's not completely production-ready out of the box, see below - you should think about at least SSL termination and authentication.
 You can set any of the configuration variables described below as environment variables on the container with the same name as the
