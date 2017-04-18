@@ -1,0 +1,5 @@
+language: javascript
+
+install: "pip install --user $(whoami) -r requirements.txt"
+
+script: ""
