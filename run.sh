@@ -25,4 +25,4 @@ listen_port="${LISTEN_PORT:-5000}"
 
 echo "Starting gunicorn with ${gunicorn_worker_count} workers, listening on ${listen_host}:${listen_port}"
 
-exec ./virtualenv/bin/gunicorn -w "${GUNICORN_WORKER_COUNT:-2}" -k eventlet -b "${LISTEN_HOST:-0.0.0.0}:${LISTEN_PORT:-5000}" application:app
+exec ./virtualenv/bin/gunicorn -w "${GUNICORN_WORKER_COUNT:-2}" -k gevent -b "${LISTEN_HOST:-0.0.0.0}:${LISTEN_PORT:-5000}" application:app
