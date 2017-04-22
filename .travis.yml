@@ -1,0 +1,21 @@
+language: javascript
+
+install: "pip install --user $(whoami) -r requirements.txt"
+
+script: ""
+
+env:
+  global:
+    - secure: "HXU4NcEu8u4wLXePAOXhlkFKhiegfarRYravYV4HqEddTn6vgIBrRvmc8CUorNgzjUv6zpSFdc9lpE+3Gg5NXcpdWPlNwrxHTcUlaUgjZqqOhjOm0u0sV7OqQRj4fUc0gpdGeill8bsA6Jcd/c+L8gzcwSzx/5ZElmQF94F49METi+idi8PqcRz8vRbc/K/AQuDyxOQjfWpuMjtzMHFuhDpfj4+gtiazUessYRkTTxHb90YInCaCTpcAObKkIHqZJO5VdY2SWIwpN1dMPa0xfzLjjZcF15P6KjtwVN/hs1vj6xQe0JXusNtt3PvVSLpw7ap5ZzVB76IglZ7s+++1ouFXXEuUYSB7ij74lY5uBd9MrvmIEpbXq03kFquSB9DGtvBQQNDTl4WvPB1pm99WD9DYzCaLUUUJKFUiNC2Vfc3p1LVCaV6e6mp0DfLDiW9cSvKBZMVNTjiZw1Jkp4sLzmuKeqrdw43P4xzAk1wkNbcRk/pB1JcmyIzgYK7hBbK+3G+p/Shu0gO6dKO+HYdu2Gh+Gwc019u5oa5hCqH4fDoSfT/twhCbznbyD6QVZqusRdr/wvUD86BKsDCy4+E6I56sb6HmcUA16HpP7VaNN5KC3E1VSl5NoqG3EZo/YHM5k9uQAug1LPldL7KuQdHjUCY7xRHiyTt+EmzZbe/gwwg=" # DOCKER_EMAIL
+    - secure: "EFqkdiuZYoSLgHAtIDi80VPodYG9ilRZgo6oVZqknGtEEm53sSAXAS960AUwzaF3q//ETo0HYz7/c/5xRFHb0LNnOthuiqwcOqazv/pNS1Fr2pv1MLGVXuPjsnoYJYpOr/AHXysLyOQkrR7+yFUoQJnUoTqbGIwQ9Ntk4s3vcA1e8uy2aXCxQHgAdYi5mp82mqlK+AEi9LcO/TbxX//YVs3GH7WJ29i6DCFaXc9o9i+kHcib+EZT4sGOY7jHoXdeNUlAgUNXMhcIEpHsOAVEdPa2oX96pGSqETFd9qJsP3qQQEEHXX6vg9WiSDoCbpEx08qHRIRiS/9yII0m46tMN5L7BUdFA/4nGKjIhaxrKbaa6JXxA2R/WpCL+gBxtD9TYRFWL99XxXAUkMuyvWDH9QXaNMqzQEb5+QU0/3W4NpbYUPIZ1Dm4fQ4V9EAgJzp5mlWfKsqLevFJKhGE026PjJ9gmw0Y/uI6ADRAOsarJBlCpLLssaXjFeqETH4RZUZXGQpCT8rO5u2kRbrqhhYVXugHF0SSG4G1/RxX2mchhT7/EYxOr/jYpr5NKWCJIrgqb4fOofD9HuzuS2MfMVgk+/YogwDl+npNHcuVwfCSpClPCSiRgOYgmE1kxAhrxBn3Vdwpmjz5u4ILeM0ARduaQI7mLpOekTE5ariqOHWnO/I=" # DOCKER_USER
+    - secure: "ukgwdYPAaSqjjO81DwAF9/E/vGZxGJflpp8izDWv5Dyfq/9yL5kcGBYJrQb4rWIOI3nXTAbPLPpZ0YmDACEzsbBczEzTtpwuGkHo6x0D3XuA7jfI7CXMVyANgMDIJFGfMAdr4FRrd9K/gXycvoPhvbHWm4glajfiso1Wb5JXPH5KLh2hp3RyHwsGV3w6rnUYQ2x+8lWyoN7uBhMLSvMfoFsu35cPnMXZ4q6F+g10+NQL4/HBbXhHSbiIaFBRkoreWMK1AgOHP7K1HL7RIUZP3h4QCp9K/Xl//wzgq2Co+k15RsGOCdiYpOpYFQbzrmPml4olARpSMQc4SaYSLWQ6W6y9QdksNpIHvk8rRXKCzIOCD4ffLyubocGH0FIzi6Ba6RTc7Sp6XtyZkxdboF8i3apMHMWfbzlrrQwon4zHN0AqvbFuo1pAHDtAeiJyZ6CPMtELgBElm7GMGvr/aiXHrQmIIGtVthX7ue1yQVNllytjdUsG3wUY3r6d+dZ38ZfPpOKVsyrpf0ol2viWK+Bw7rZq+nznCPGLWbqmBjp3qQI2d2TrKkcoYyvkfqvsoL3tKprws/kQpBPr6Nx58Ly0ZOXbCmjGkADNVWY07fyUcTGJzsD8VWlpX//gyTqaGBNs1CQP0LAmyjF3QzAa6GCQoEgr2Ix53BpLW7MXiX/kEzg=" # DOCKER_PASS
+    - COMMIT=${TRAVIS_COMMIT::8}
+
+after_success:
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - export REPO=bkartyas/changelog
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+  - docker build -f Dockerfile -t $REPO:$COMMIT .
+  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  - docker push $REPO

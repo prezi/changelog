@@ -10,6 +10,6 @@ RUN apt-get update && \
                        libpq-dev && \
     apt-get clean && \
     /opt/changelog/setup.sh && \
-    /opt/changelog/virtualenv/bin/pip install -r requirements-mysql.txt -r requirements-postgres.txt gunicorn eventlet
+    /opt/changelog/virtualenv/bin/pip install -r requirements-mysql.txt -r requirements-postgres.txt gunicorn gevent
 
 CMD /opt/changelog/run.sh
