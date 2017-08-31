@@ -1,4 +1,6 @@
 import time
+import calendar
+from datetime import datetime
 from flask import Flask, render_template
 from flask.ext.restful import reqparse, Api, Resource
 from raven.contrib.flask import Sentry
@@ -36,6 +38,12 @@ query_parser.add_argument('hours_ago', type=float, required=True)
 query_parser.add_argument('until', type=int)
 query_parser.add_argument('category', type=unicode)
 query_parser.add_argument('description', type=unicode)
+
+annotation_query_parser = reqparse.RequestParser()
+annotation_query_parser.add_argument('range', type=dict, required=True, location='json')
+annotation_query_parser.add_argument('rangeRaw', type=dict, required=True, location='json')
+annotation_query_parser.add_argument('annotation', type=dict, required=True, location='json')
+ISO_DATE_STRING = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 Base = declarative_base()
 events = Table('events', Base.metadata,
@@ -102,7 +110,42 @@ class EventList(Resource):
         return 'OK', 201
 
 
+class AnnotationList(Resource):
+    def post(self):
+        query = annotation_query_parser.parse_args()
+
+        if 'query' not in query['annotation']:  # No tags queried
+            return []
+
+        db_query = db.session.query(Event)
+
+        start_date = datetime.strptime(query['range']['from'], ISO_DATE_STRING)
+        end_date = datetime.strptime(query['range']['to'], ISO_DATE_STRING)
+        category = query['annotation']['query'].split(',')
+
+        db_query = db_query.filter(Event.category.in_(category))
+
+        db_query = db_query.filter(Event.unix_timestamp >= calendar.timegm(start_date.timetuple()))
+        db_query = db_query.filter(Event.unix_timestamp <= calendar.timegm(end_date.timetuple()))
+
+        result = db_query.order_by(Event.unix_timestamp.desc()).all()
+
+        events = [
+            {
+                "annotation": query['annotation'],
+                "time": r.unix_timestamp * 1000,
+                "title": r.description,
+                "tags": [
+                    "criticality:{criticality}".format(criticality=r.criticality),
+                    "category:{category}".format(category=r.category),
+                ],
+            } for r in result
+        ]
+        return events
+
 api.add_resource(EventList, '/api/events')
+api.add_resource(AnnotationList, '/annotations')
+
 
 # Healthcheck, supposing that there is at least one element in the database.
 @app.route('/healthcheck')
@@ -124,6 +167,9 @@ def index():
     categories = [str(entry[0]) for entry in db.engine.execute(statement).fetchall()]
     return render_template('index.html', categories=categories)
 
+@app.route('/query', methods=['POST'])
+def query():
+    return '[]', 200
 
 if __name__ == '__main__':
     app.run(debug=True, host=settings.LISTEN_HOST, port=settings.LISTEN_PORT)
