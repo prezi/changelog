@@ -134,9 +134,11 @@ class AnnotationList(Resource):
             {
                 "annotation": query['annotation'],
                 "time": r.unix_timestamp * 1000,
-                "title": "Criticality {criticality}".format(criticality=r.criticality),
-                "tags": r.category,
-                "text": r.description
+                "title": r.description,
+                "tags": [
+                    "criticality:{criticality}".format(criticality=r.criticality),
+                    "category:{category}".format(category=r.category),
+                ],
             } for r in result
         ]
         return events
