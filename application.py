@@ -114,6 +114,9 @@ class AnnotationList(Resource):
     def post(self):
         query = annotation_query_parser.parse_args()
 
+        if 'query' not in query['annotation']:  # No tags queried
+            return []
+
         db_query = db.session.query(Event)
 
         start_date = datetime.strptime(query['range']['from'], ISO_DATE_STRING)
