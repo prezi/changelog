@@ -29,6 +29,7 @@
     "autobind-decorator": "^2.1.0",
     "lodash": "^4.17.4",
     "material-ui": "^0.19.1",
+    "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "whatwg-fetch": "^2.0.3"

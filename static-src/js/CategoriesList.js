@@ -1,4 +1,5 @@
 import * as React from "react";
+import PropTypes from 'prop-types';
 
 const CategoriesList = ({categories, onToggle}) => <ul>
     {categories.map(category =>
@@ -9,8 +10,8 @@ const CategoriesList = ({categories, onToggle}) => <ul>
 </ul>;
 
 CategoriesList.propTypes = {
-    categories: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-    onToggle: React.PropTypes.func.isRequired
+    categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+    onToggle: PropTypes.func.isRequired
 };
 
 export default CategoriesList;

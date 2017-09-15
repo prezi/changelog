@@ -1,4 +1,5 @@
 import * as React from "react";
+import PropTypes from 'prop-types';
 
 const EventsList = ({events, onToggle}) => <ul>
     {events.map(event =>
@@ -10,7 +11,7 @@ const EventsList = ({events, onToggle}) => <ul>
 </ul>;
 
 EventsList.propTypes = {
-    events: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+    events: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default EventsList;
