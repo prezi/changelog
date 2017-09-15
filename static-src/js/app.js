@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import CategoriesList from './CategoriesList';
+import MainContainer from "./MainContainer";
 
 const App = () => (
     <MuiThemeProvider>
-        <CategoriesList/>
+        <MainContainer/>
     </MuiThemeProvider>
 );
 

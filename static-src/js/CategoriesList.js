@@ -1,29 +1,16 @@
 import * as React from "react";
 
-import { fetchEvents} from './api';
+const CategoriesList = ({categories, onToggle}) => <ul>
+    {categories.map(category =>
+        <li key={category} onClick={() => onToggle(category)}>
+            {category}
+        </li>
+    )}
+</ul>;
 
-export default class CategoriesList extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            events: []
-        };
-    }
+CategoriesList.propTypes = {
+    categories: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+    onToggle: React.PropTypes.func.isRequired
+};
 
-    componentDidMount() {
-        fetchEvents()
-            .then(res => res.json())
-            .then(json => this.setState({events: json}));
-    }
-
-    render() {
-        return(
-            <div>
-                <div>Items:</div>
-                {
-                    JSON.stringify(this.state.events)
-                }
-            </div>
-        );
-    }
-}
+export default CategoriesList;
