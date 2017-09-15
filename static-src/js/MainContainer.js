@@ -11,10 +11,6 @@ export default class MainContainer extends React.Component {
         super();
         this.query = new Query(this.handleQueryResult);
         this.state = {
-            query: {
-                hours_ago: 1,
-                until: -1
-            },
             categories: [],
             events: []
         };
@@ -24,7 +20,7 @@ export default class MainContainer extends React.Component {
     handleQueryResult(json) {
         this.setState({
             events: json,
-            categories: _(json).map(x => x.category).uniq().value()
+            categories: _(json).map(x => x.category).uniq().union(this.state.categories).sort().value()
         });
     }
 
@@ -40,7 +36,10 @@ export default class MainContainer extends React.Component {
     render() {
         return (<div className="main-container">
             <h2>Categories</h2>
-            <CategoriesList categories={this.state.categories} onToggle={this.handleCategoryToggle}/>
+            <CategoriesList
+                categories={this.state.categories}
+                filteredCategories={this.query.params.category}
+                onToggle={this.handleCategoryToggle}/>
             <h2>Events</h2>
             <EventsList events={this.state.events}/>
         </div>);
