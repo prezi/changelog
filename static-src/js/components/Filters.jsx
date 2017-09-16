@@ -1,6 +1,7 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Paper from 'material-ui/Paper'
-import sizeMe from 'react-sizeme'
+import ReactResizeDetector from 'react-resize-detector'
 
 import CriticalityFilter from './CriticalityFilter.jsx'
 import CategoryFilter from '../containers/CategoryFilter.jsx'
@@ -11,8 +12,9 @@ const paperStyle = {
   padding: 7
 }
 
-const Filters = () =>
+const Filters = ({onResize}) =>
   <div className='row'>
+    <ReactResizeDetector handleHeight onResize={onResize} />
     <div className='col-2'>
       <Paper style={paperStyle}>
         <CriticalityFilter />
@@ -33,4 +35,8 @@ const Filters = () =>
     </div>
   </div>
 
-export default sizeMe({monitorHeight: true})(Filters)
+Filters.propTypes = {
+  onResize: PropTypes.func.isRequired
+}
+
+export default Filters

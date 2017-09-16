@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Filters from './Filters.jsx'
+import Filters from '../containers/Filters.jsx'
 import EventsList from '../containers/EventsList.jsx'
 
 export default class MainContainer extends React.Component {
@@ -12,7 +12,7 @@ export default class MainContainer extends React.Component {
   render () {
     return (<div className='main-container'>
       <Filters />
-      <EventsList height={window.innerHeight - this.props.filtersHeight} />
+      <EventsList height={window.innerHeight - this.props.filtersHeight - 10} />
     </div>)
   }
 }

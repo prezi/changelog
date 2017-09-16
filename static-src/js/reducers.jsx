@@ -72,7 +72,7 @@ function fetching (state = defaultFetching, action) {
   }
 }
 
-function filtersHeight (state = 0, action) {
+function filtersHeight (state = 200, action) {
   switch (action.type) {
     case FILTERS_HEIGHT_CHANGED:
       return action.height
