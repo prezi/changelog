@@ -307,4 +307,4 @@ tags
 
 virtualenv
 changelog.db
-static/js
+static
