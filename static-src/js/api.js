@@ -1,10 +1,12 @@
 import 'whatwg-fetch';
 import _ from 'lodash';
 
+import '../css/main.css';
+
 export class Query {
     constructor(dataHandler) {
         this.params = {
-            hours_ago: 1,
+            hours_ago: 5,
             until: -1,
             category: [],
         };
@@ -28,5 +30,9 @@ export class Query {
 
     toggleCategory(category) {
         this.update('category', _.xor(this.params.category, [category]));
+    }
+
+    resetCategory() {
+        this.update('category', []);
     }
 }
