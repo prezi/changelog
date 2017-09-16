@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator'
 
 import {flow, map, uniq, union, sortBy, identity} from 'lodash/fp'
 
-import CategoriesList from './CategoriesList.jsx'
+import Filters from './Filters.jsx'
 import EventsList from './EventsList.jsx'
 import {Query} from './api.jsx'
 
@@ -12,6 +12,7 @@ export default class MainContainer extends React.Component {
     super()
     this.query = new Query(this.handleQueryResult)
     this.state = {
+      eventsHeight: 50,
       categories: [],
       events: []
     }
@@ -40,21 +41,28 @@ export default class MainContainer extends React.Component {
     this.query.resetCategory()
   }
 
+  @autobind
+  handleSize (size) {
+    this.setState({ eventsHeight: window.innerHeight - size.height })
+  }
+
   componentDidMount () {
     this.query.fetch()
   }
 
   render () {
     return (<div className='main-container'>
-      <CategoriesList
-        categories={this.state.categories}
-        filteredCategories={this.query.params.category}
-        onToggle={this.handleCategoryToggle}
-        onShowOnly={this.handleShowSingleCategory}
-        onReset={this.handleCategoryReset}
-      />
-      <h2>Events</h2>
-      <EventsList events={this.state.events} />
+      <div id='filters'>
+        <Filters
+          onSize={this.handleSize}
+          categories={this.state.categories}
+          filteredCategories={this.query.params.category}
+          onToggle={this.handleCategoryToggle}
+          onShowOnly={this.handleShowSingleCategory}
+          onReset={this.handleCategoryReset}
+        />
+      </div>
+      <EventsList events={this.state.events} height={this.state.eventsHeight} />
     </div>)
   }
 }
