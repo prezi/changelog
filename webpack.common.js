@@ -26,7 +26,7 @@ module.exports = {
                 loader: 'babel-loader',
                 options: {
                     presets: [['env', {targets: {browsers: 'last 2 versions'}}], 'react'],
-                    plugins: ['transform-decorators-legacy', 'lodash']
+                    plugins: ['transform-decorators-legacy', 'transform-object-rest-spread', 'lodash']
                 },
                 exclude: /node_modules/
             }, {

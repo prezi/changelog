@@ -1,10 +1,12 @@
 import React from 'react'
 import Chip from 'material-ui/Chip'
 import FlatButton from 'material-ui/FlatButton'
-import {blue300} from 'material-ui/styles/colors'
+import Avatar from 'material-ui/Avatar'
+import {blue300, indigo900} from 'material-ui/styles/colors'
 import PropTypes from 'prop-types'
+import {toPairs, map} from 'lodash'
 
-import '../../node_modules/simplegrid/simple-grid.scss'
+import 'simplegrid/simple-grid.scss'
 
 const wrapperStyle = {
   display: 'flex',
@@ -16,6 +18,16 @@ const chipStyle = {
 }
 
 const CategoryFilter = ({categories, filteredCategories, onToggle, onShowOnly, onReset}) => {
+  const renderCategory = ([category, eventCount]) =>
+    <Chip
+      key={category}
+      style={chipStyle}
+      backgroundColor={filteredCategories.indexOf(category) > -1 ? blue300 : null}
+      onClick={handleClick(category)}>
+      <Avatar backgroundColor={filteredCategories.indexOf(category) > -1 ? indigo900 : null}>{eventCount}</Avatar>
+      {category}
+    </Chip>
+
   const handleClick = (category) => (e) => {
     if (e.shiftKey) {
       onShowOnly(category)
@@ -27,15 +39,7 @@ const CategoryFilter = ({categories, filteredCategories, onToggle, onShowOnly, o
   return (
     <div>
       <div style={wrapperStyle}>
-        {categories.map((category) =>
-          <Chip
-            key={category}
-            style={chipStyle}
-            backgroundColor={filteredCategories.indexOf(category) > -1 ? blue300 : null}
-            onClick={handleClick(category)}>
-            {category}
-          </Chip>
-        )}
+        {map(toPairs(categories), renderCategory)}
       </div>
       <div>
         <FlatButton onClick={onReset}>Show All</FlatButton>
@@ -45,7 +49,7 @@ const CategoryFilter = ({categories, filteredCategories, onToggle, onShowOnly, o
 }
 
 CategoryFilter.propTypes = {
-  categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+  categories: PropTypes.object.isRequired,
   filteredCategories: PropTypes.arrayOf(PropTypes.string).isRequired,
   onToggle: PropTypes.func.isRequired,
   onShowOnly: PropTypes.func.isRequired,

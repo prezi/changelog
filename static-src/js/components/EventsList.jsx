@@ -5,7 +5,6 @@ import leftPad from 'left-pad'
 import {Table, Column, Cell} from 'fixed-data-table-2'
 import 'fixed-data-table-2/dist/fixed-data-table.css'
 
-// This function safes about 1MB by not including moment.js \o/
 const formatDate = (ts) => {
   const d = new Date(ts)
   return (1900 + d.getYear()) + '-' + leftPad(d.getMonth(), 2, '0') + '-' + leftPad(d.getDate(), 2, '0') +
@@ -44,7 +43,10 @@ const EventsList = ({events, height}) => {
       <Column
         width={descriptionWidth}
         header={<Cell>Description</Cell>}
-        cell={({rowIndex, width, height}) => <Cell width={width} height={height}>{events[rowIndex].description}</Cell>}
+        cell={({rowIndex, width, height}) =>
+          <Cell width={width} height={height}>
+            <span dangerouslySetInnerHTML={{__html: events[rowIndex].description}} />
+          </Cell>}
       />
     </Table>
   )

@@ -18,12 +18,11 @@ const TimeFilter = () => <div>
     <FlatButton>Last 1h</FlatButton>
     <FlatButton>Last 4h</FlatButton>
     <FlatButton>Last 1d</FlatButton>
-    <FlatButton>Last 1w</FlatButton>
   </div>
   <div style={{display: 'flex'}}>
+    <FlatButton>Last 1w</FlatButton>
     <FlatButton>Last 1M</FlatButton>
-    <FlatButton>Last 6M</FlatButton>
-    <FlatButton>Last 1Y</FlatButton>
+    <FlatButton>Last 3M</FlatButton>
   </div>
 </div>
 
