@@ -1,32 +1,46 @@
 import React from 'react'
 import Chip from 'material-ui/Chip'
-import FlatButton from 'material-ui/FlatButton'
+import Button from 'material-ui/Button'
 import Avatar from 'material-ui/Avatar'
-import {blue300, indigo900} from 'material-ui/styles/colors'
+import { blue, indigo } from 'material-ui/colors'
+import { withStyles } from 'material-ui/styles'
 import PropTypes from 'prop-types'
-import {toPairs, map} from 'lodash'
+import { toPairs, map } from 'lodash'
+import classNames from 'classnames'
 
-import 'simplegrid/simple-grid.scss'
-
-const wrapperStyle = {
-  display: 'flex',
-  flexWrap: 'wrap'
+const styles = {
+  wrapper: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  chip: {
+    margin: 4
+  },
+  filteredChip: {
+    backgroundColor: blue[300],
+    '&:hover, &:focus': {
+      backgroundColor: blue[300]
+    }
+  },
+  avatar: {
+    fontSize: 13,
+    height: 30,
+    width: 30
+  },
+  filteredAvatar: {
+    backgroundColor: indigo[900]
+  }
 }
 
-const chipStyle = {
-  margin: 4
-}
-
-const CategoryFilter = ({categories, filteredCategories, onToggle, onShowOnly, onReset}) => {
+const CategoryFilter = ({categories, filteredCategories, onToggle, onShowOnly, onReset, classes}) => {
   const renderCategory = ([category, eventCount]) =>
     <Chip
       key={category}
-      style={chipStyle}
-      backgroundColor={filteredCategories.indexOf(category) > -1 ? blue300 : null}
-      onClick={handleClick(category)}>
-      <Avatar backgroundColor={filteredCategories.indexOf(category) > -1 ? indigo900 : null}>{eventCount}</Avatar>
-      {category}
-    </Chip>
+      className={classNames(classes.chip, filteredCategories.indexOf(category) > -1 ? classes.filteredChip : '')}
+      onClick={handleClick(category)}
+      avatar={<Avatar className={classNames(classes.avatar, filteredCategories.indexOf(category) > -1 ? classes.filteredAvatar : '')}>{eventCount.toString()}</Avatar>}
+      label={category}
+    />
 
   const handleClick = (category) => (e) => {
     if (e.shiftKey) {
@@ -38,11 +52,11 @@ const CategoryFilter = ({categories, filteredCategories, onToggle, onShowOnly, o
 
   return (
     <div>
-      <div style={wrapperStyle}>
+      <div className={classes.wrapper}>
         {map(toPairs(categories), renderCategory)}
       </div>
       <div>
-        <FlatButton onClick={onReset}>Show All</FlatButton>
+        <Button onClick={onReset}>Show All</Button>
       </div>
     </div>
   )
@@ -53,7 +67,8 @@ CategoryFilter.propTypes = {
   filteredCategories: PropTypes.arrayOf(PropTypes.string).isRequired,
   onToggle: PropTypes.func.isRequired,
   onShowOnly: PropTypes.func.isRequired,
-  onReset: PropTypes.func.isRequired
+  onReset: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired
 }
 
-export default CategoryFilter
+export default withStyles(styles)(CategoryFilter)

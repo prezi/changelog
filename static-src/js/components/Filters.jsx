@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Paper from 'material-ui/Paper'
 import ReactResizeDetector from 'react-resize-detector'
+import Grid from 'material-ui/Grid'
 
 import CriticalityFilter from '../containers/CriticalityFilter.jsx'
 import CategoryFilter from '../containers/CategoryFilter.jsx'
@@ -13,27 +14,27 @@ const paperStyle = {
 }
 
 const Filters = ({onResize}) =>
-  <div className='row'>
+  <Grid container>
     <ReactResizeDetector handleHeight onResize={onResize} />
-    <div className='col-2'>
+    <Grid item xs={12} sm={2}>
       <Paper style={paperStyle}>
         <CriticalityFilter />
       </Paper>
-    </div>
-    <div className='col-3'>
+    </Grid>
+    <Grid item xs={12} sm={3}>
       <Paper style={paperStyle}>
         <TimeFilter />
       </Paper>
-    </div>
-    <div className='col-7'>
+    </Grid>
+    <Grid item xs={12} sm={7}>
       <Paper style={paperStyle}>
         <CategoryFilter />
       </Paper>
       <Paper style={paperStyle}>
         <DescriptionFilter />
       </Paper>
-    </div>
-  </div>
+    </Grid>
+  </Grid>
 
 Filters.propTypes = {
   onResize: PropTypes.func.isRequired

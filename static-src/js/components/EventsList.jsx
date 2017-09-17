@@ -12,7 +12,7 @@ const formatDate = (ts) => {
 }
 
 const EventsList = ({events, height}) => {
-  const fullWidth = Math.max(document.documentElement.clientWidth, (window.innerWidth || 0)) || 800
+  const fullWidth = (Math.max(document.documentElement.clientWidth, (window.innerWidth || 0)) || 800) - 15
   const criticalityWidth = 50
   const categoryWidth = 200
   const timeWidth = 200
