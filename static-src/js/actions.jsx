@@ -44,7 +44,7 @@ export function filterByDescription (description) {
 
 export const FETCH_EVENTS = 'FETCH_EVENTS'
 export function fetchEvents (filters) {
-  return function (dispatch) {
+  const thunk = (dispatch) => {
     const url = new window.URL(window.location.href + 'api/events')
     flow([
       toPairs,
@@ -58,6 +58,15 @@ export function fetchEvents (filters) {
       .catch(error => dispatch(fetchFailed(error)))
     dispatch({type: FETCH_EVENTS, filters, promise})
   }
+  thunk.meta = {
+    debounce: {
+      time: 400,
+      leading: true,
+      trailing: true,
+      key: FETCH_EVENTS
+    }
+  }
+  return thunk
 }
 
 export const RECEIVED_EVENTS = 'RECEIVED_EVENTS'
