@@ -1,3 +1,4 @@
+import 'whatwg-fetch'
 import {flow, toPairs, filter, forEach, isArray, isEmpty, isNull} from 'lodash/fp'
 
 export const TOGGLE_CATEGORY = 'TOGGLE_CATEGORY'
@@ -68,7 +69,7 @@ export function fetchEvents (filters) {
       forEach(([key, value]) => url.searchParams.append(key, value))
     ])(filters)
     const promise = window
-      .fetch(url)
+      .fetch(url, {credentials: 'include'})
       .then(res => res.json())
       .then(json => dispatch(receivedEvents(json, promise)))
       .catch(error => dispatch(fetchFailed(error, promise)))

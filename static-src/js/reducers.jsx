@@ -1,4 +1,3 @@
-import 'whatwg-fetch'
 import {combineReducers} from 'redux'
 import {countBy, assign} from 'lodash'
 import {flow, map, toPairs, fromPairs, xor} from 'lodash/fp'
