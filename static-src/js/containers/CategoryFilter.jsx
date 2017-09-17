@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 
-import {toggleCategory} from '../actions.jsx'
+import {toggleCategory, showSingleCategory, resetCategories} from '../actions.jsx'
 import Component from '../components/CategoryFilter.jsx'
 
 const mapStateToProps = (state) => {
@@ -13,8 +13,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onToggle: (category) => dispatch(toggleCategory(category)),
-    onShowOnly: () => null,
-    onReset: () => null
+    onShowOnly: (category) => dispatch(showSingleCategory(category)),
+    onReset: () => dispatch(resetCategories())
   }
 }
 

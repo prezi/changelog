@@ -4,7 +4,8 @@ import {countBy, assign} from 'lodash'
 import {flow, map, toPairs, fromPairs, xor} from 'lodash/fp'
 
 import {
-  TOGGLE_CATEGORY, FETCH_EVENTS, FETCH_FAILED, RECEIVED_EVENTS,
+  TOGGLE_CATEGORY, SHOW_SINGLE_CATEGORY, RESET_CATEGORIES,
+  FETCH_EVENTS, FETCH_FAILED, RECEIVED_EVENTS,
   FILTERS_HEIGHT_CHANGED
 } from './actions.jsx'
 
@@ -17,6 +18,10 @@ function filters (state = defaultFilters, action) {
   switch (action.type) {
     case TOGGLE_CATEGORY:
       return {...state, category: xor(state.category, [action.category])}
+    case SHOW_SINGLE_CATEGORY:
+      return {...state, category: [action.category]}
+    case RESET_CATEGORIES:
+      return {...state, category: []}
     default:
       return state
   }

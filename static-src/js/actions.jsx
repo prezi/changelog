@@ -8,6 +8,19 @@ export function toggleCategory (category) {
   }
 }
 
+export const SHOW_SINGLE_CATEGORY = 'SHOW_SINGLE_CATEGORY'
+export function showSingleCategory (category) {
+  return {
+    type: SHOW_SINGLE_CATEGORY,
+    category
+  }
+}
+
+export const RESET_CATEGORIES = 'RESET_CATEGORIES'
+export function resetCategories () {
+  return {type: RESET_CATEGORIES}
+}
+
 export const FETCH_EVENTS = 'FETCH_EVENTS'
 export function fetchEvents (filters) {
   return function (dispatch) {
