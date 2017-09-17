@@ -7,13 +7,14 @@ import {
   TOGGLE_CATEGORY, SHOW_SINGLE_CATEGORY, RESET_CATEGORIES,
   TOGGLE_CRITICALITY, RESET_CRITICALITY,
   FILTER_BY_DESCRIPTION,
+  SET_UNTIL, SET_HOURS_AGO,
   FETCH_EVENTS, FETCH_FAILED, RECEIVED_EVENTS,
   FILTERS_HEIGHT_CHANGED
 } from './actions.jsx'
 
 const defaultFilters = {
-  hours_ago: 90,
-  until: -1,
+  hours_ago: 1,
+  until: Math.round((new Date()).getTime() / 1000),
   category: [],
   criticality: [],
   description: ''
@@ -33,6 +34,16 @@ function filters (state = defaultFilters, action) {
       return {...state, criticality: []}
     case FILTER_BY_DESCRIPTION:
       return {...state, description: action.description}
+    case SET_UNTIL:
+      if (action.until > new Date()) {
+        return state
+      }
+      return {...state, until: Math.round(action.until.getTime() / 1000)}
+    case SET_HOURS_AGO:
+      if (action.hoursAgo < 1) {
+        return state
+      }
+      return {...state, hours_ago: action.hoursAgo}
     default:
       return state
   }

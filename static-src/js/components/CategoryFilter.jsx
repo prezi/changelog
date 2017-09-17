@@ -4,6 +4,7 @@ import Button from 'material-ui/Button'
 import Avatar from 'material-ui/Avatar'
 import { blue } from 'material-ui/colors'
 import { withStyles } from 'material-ui/styles'
+import { FormControl, FormLabel, FormGroup } from 'material-ui/Form'
 import PropTypes from 'prop-types'
 import { toPairs, map } from 'lodash'
 import classNames from 'classnames'
@@ -51,14 +52,15 @@ const CategoryFilter = ({categories, filteredCategories, onToggle, onShowOnly, o
   }
 
   return (
-    <div>
-      <div className={classes.wrapper}>
+    <FormControl component='fieldset'>
+      <FormLabel>Categories</FormLabel>
+      <FormGroup row>
         {map(toPairs(categories), renderCategory)}
-      </div>
-      <div>
+      </FormGroup>
+      <FormGroup row>
         <Button onClick={onReset}>Show All</Button>
-      </div>
-    </div>
+      </FormGroup>
+    </FormControl>
   )
 }
 

@@ -7,7 +7,7 @@ import 'fixed-data-table-2/dist/fixed-data-table.css'
 
 const formatDate = (ts) => {
   const d = new Date(ts)
-  return (1900 + d.getYear()) + '-' + leftPad(d.getMonth(), 2, '0') + '-' + leftPad(d.getDate(), 2, '0') +
+  return (1900 + d.getYear()) + '-' + leftPad(1 + d.getMonth(), 2, '0') + '-' + leftPad(d.getDate(), 2, '0') +
          ' ' + leftPad(d.getHours(), 2, '0') + ':' + leftPad(d.getMinutes(), 2, '0') + ':' + leftPad(d.getSeconds(), 2, '0')
 }
 

@@ -42,6 +42,22 @@ export function filterByDescription (description) {
   }
 }
 
+export const SET_UNTIL = 'SET_UNTIL'
+export function setUntil (until) {
+  return {
+    type: SET_UNTIL,
+    until
+  }
+}
+
+export const SET_HOURS_AGO = 'HOURS_AGO'
+export function setHoursAgo (hoursAgo) {
+  return {
+    type: SET_HOURS_AGO,
+    hoursAgo
+  }
+}
+
 export const FETCH_EVENTS = 'FETCH_EVENTS'
 export function fetchEvents (filters) {
   const thunk = (dispatch) => {

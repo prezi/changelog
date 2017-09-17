@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FormGroup, FormControlLabel } from 'material-ui/Form'
+import { FormControl, FormLabel, FormGroup, FormControlLabel } from 'material-ui/Form'
 import Checkbox from 'material-ui/Checkbox'
 import Button from 'material-ui/Button'
 import { withStyles } from 'material-ui/styles'
@@ -22,7 +22,8 @@ const CriticalityFilter = ({filteredCriticalities, onToggle, onReset, classes}) 
       />
     </FormGroup>
   return (
-    <div>
+    <FormControl component='fieldset'>
+      <FormLabel style={{marginBottom: 10}}>Criticality</FormLabel>
       {checkbox(5, '5 (Most Criticial)')}
       {checkbox(4, '4')}
       {checkbox(3, '3')}
@@ -31,7 +32,7 @@ const CriticalityFilter = ({filteredCriticalities, onToggle, onReset, classes}) 
       <FormGroup row>
         <Button onClick={onReset}>Show All</Button>
       </FormGroup>
-    </div>
+    </FormControl>
   )
 }
 

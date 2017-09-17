@@ -7,7 +7,7 @@ import Divider from 'material-ui/Divider'
 
 import CriticalityFilter from '../containers/CriticalityFilter.jsx'
 import CategoryFilter from '../containers/CategoryFilter.jsx'
-import TimeFilter from './TimeFilter.jsx'
+import TimeFilter from '../containers/TimeFilter.jsx'
 import DescriptionFilter from '../containers/DescriptionFilter.jsx'
 
 const paperStyle = {
