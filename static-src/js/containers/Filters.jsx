@@ -9,7 +9,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onRezise: (size) => dispatch(filtersHeightChanged(size.height))
+    onResize: (width, height) => dispatch(filtersHeightChanged(height))
   }
 }
 

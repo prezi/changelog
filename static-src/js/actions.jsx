@@ -21,6 +21,19 @@ export function resetCategories () {
   return {type: RESET_CATEGORIES}
 }
 
+export const TOGGLE_CRITICALITY = 'TOGGLE_CRITICALITY'
+export function toggleCriticality (criticality) {
+  return {
+    type: TOGGLE_CRITICALITY,
+    criticality
+  }
+}
+
+export const RESET_CRITICALITY = 'RESET_CRITICALITY'
+export function resetCriticality () {
+  return {type: RESET_CRITICALITY}
+}
+
 export const FETCH_EVENTS = 'FETCH_EVENTS'
 export function fetchEvents (filters) {
   return function (dispatch) {

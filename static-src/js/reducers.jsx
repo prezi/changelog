@@ -5,6 +5,7 @@ import {flow, map, toPairs, fromPairs, xor} from 'lodash/fp'
 
 import {
   TOGGLE_CATEGORY, SHOW_SINGLE_CATEGORY, RESET_CATEGORIES,
+  TOGGLE_CRITICALITY, RESET_CRITICALITY,
   FETCH_EVENTS, FETCH_FAILED, RECEIVED_EVENTS,
   FILTERS_HEIGHT_CHANGED
 } from './actions.jsx'
@@ -12,8 +13,10 @@ import {
 const defaultFilters = {
   hours_ago: 90,
   until: -1,
-  category: []
+  category: [],
+  criticality: []
 }
+
 function filters (state = defaultFilters, action) {
   switch (action.type) {
     case TOGGLE_CATEGORY:
@@ -22,6 +25,10 @@ function filters (state = defaultFilters, action) {
       return {...state, category: [action.category]}
     case RESET_CATEGORIES:
       return {...state, category: []}
+    case TOGGLE_CRITICALITY:
+      return {...state, criticality: xor(state.criticality, [action.criticality])}
+    case RESET_CRITICALITY:
+      return {...state, criticality: []}
     default:
       return state
   }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Paper from 'material-ui/Paper'
 import ReactResizeDetector from 'react-resize-detector'
 
-import CriticalityFilter from './CriticalityFilter.jsx'
+import CriticalityFilter from '../containers/CriticalityFilter.jsx'
 import CategoryFilter from '../containers/CategoryFilter.jsx'
 import TimeFilter from './TimeFilter.jsx'
 import DescriptionFilter from './DescriptionFilter.jsx'
