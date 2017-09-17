@@ -26,7 +26,7 @@ module.exports = {
                 loader: 'babel-loader',
                 options: {
                     presets: [['env', {targets: {browsers: 'last 2 versions'}}], 'react'],
-                    plugins: ['transform-decorators-legacy', 'transform-object-rest-spread', 'lodash']
+                    plugins: ['transform-object-rest-spread', 'lodash']
                 },
                 exclude: /node_modules/
             }, {
@@ -39,7 +39,7 @@ module.exports = {
                 test: /\.scss$/,
                 loader: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use: 'css-loader!sass-loader'
+                    use: 'css-loader'
                 })
             }
         ]
