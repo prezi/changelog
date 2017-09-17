@@ -34,6 +34,14 @@ export function resetCriticality () {
   return {type: RESET_CRITICALITY}
 }
 
+export const FILTER_BY_DESCRIPTION = 'FILTER_BY_DESCRIPTION'
+export function filterByDescription (description) {
+  return {
+    type: FILTER_BY_DESCRIPTION,
+    description: description.trim()
+  }
+}
+
 export const FETCH_EVENTS = 'FETCH_EVENTS'
 export function fetchEvents (filters) {
   return function (dispatch) {
@@ -46,25 +54,28 @@ export function fetchEvents (filters) {
     const promise = window
       .fetch(url)
       .then(res => res.json())
-      .then(json => dispatch(receivedEvents(json)))
+      .then(json => dispatch(receivedEvents(json, promise)))
+      .catch(error => dispatch(fetchFailed(error)))
     dispatch({type: FETCH_EVENTS, filters, promise})
   }
 }
 
 export const RECEIVED_EVENTS = 'RECEIVED_EVENTS'
-export function receivedEvents (events) {
+export function receivedEvents (events, promise) {
   return {
     type: RECEIVED_EVENTS,
     receivedAt: new Date(),
-    events
+    events,
+    promise
   }
 }
 
 export const FETCH_FAILED = 'FETCH_FAILED'
-export function fetchFailed (error) {
+export function fetchFailed (error, promise) {
   return {
     type: FETCH_FAILED,
-    error
+    error,
+    promise
   }
 }
 

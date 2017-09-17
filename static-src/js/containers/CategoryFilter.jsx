@@ -5,7 +5,7 @@ import Component from '../components/CategoryFilter.jsx'
 
 const mapStateToProps = (state) => {
   return {
-    categories: state.categories,
+    categories: state.api.categories,
     filteredCategories: state.filters.category
   }
 }

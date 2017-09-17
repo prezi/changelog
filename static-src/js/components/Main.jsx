@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import Filters from '../containers/Filters.jsx'
 import EventsList from '../containers/EventsList.jsx'
+import Loader from '../containers/Loader.jsx'
 
 export default class MainContainer extends React.Component {
   componentDidMount () {
@@ -12,6 +13,7 @@ export default class MainContainer extends React.Component {
   render () {
     return (<div className='main-container'>
       <Filters />
+      <Loader />
       <EventsList height={window.innerHeight - this.props.filtersHeight - 10} />
     </div>)
   }

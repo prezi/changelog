@@ -2,7 +2,7 @@ import React from 'react'
 import Chip from 'material-ui/Chip'
 import Button from 'material-ui/Button'
 import Avatar from 'material-ui/Avatar'
-import { blue, indigo } from 'material-ui/colors'
+import { blue } from 'material-ui/colors'
 import { withStyles } from 'material-ui/styles'
 import PropTypes from 'prop-types'
 import { toPairs, map } from 'lodash'
@@ -19,7 +19,7 @@ const styles = {
   filteredChip: {
     backgroundColor: blue[300],
     '&:hover, &:focus': {
-      backgroundColor: blue[300]
+      backgroundColor: blue[400]
     }
   },
   avatar: {
@@ -28,7 +28,7 @@ const styles = {
     width: 30
   },
   filteredAvatar: {
-    backgroundColor: indigo[900]
+    backgroundColor: blue[900]
   }
 }
 

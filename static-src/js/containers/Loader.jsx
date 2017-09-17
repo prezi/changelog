@@ -1,16 +1,15 @@
 import {connect} from 'react-redux'
 
-import Component from '../components/EventsList.jsx'
+import Component from '../components/Loader.jsx'
 
 const mapStateToProps = (state) => {
   return {
-    events: state.api.events
+    isLoading: state.api.isFetching
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-  }
+  return {}
 }
 
 export default connect(

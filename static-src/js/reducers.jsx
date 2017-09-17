@@ -6,6 +6,7 @@ import {flow, map, toPairs, fromPairs, xor} from 'lodash/fp'
 import {
   TOGGLE_CATEGORY, SHOW_SINGLE_CATEGORY, RESET_CATEGORIES,
   TOGGLE_CRITICALITY, RESET_CRITICALITY,
+  FILTER_BY_DESCRIPTION,
   FETCH_EVENTS, FETCH_FAILED, RECEIVED_EVENTS,
   FILTERS_HEIGHT_CHANGED
 } from './actions.jsx'
@@ -14,7 +15,8 @@ const defaultFilters = {
   hours_ago: 90,
   until: -1,
   category: [],
-  criticality: []
+  criticality: [],
+  description: ''
 }
 
 function filters (state = defaultFilters, action) {
@@ -29,6 +31,8 @@ function filters (state = defaultFilters, action) {
       return {...state, criticality: xor(state.criticality, [action.criticality])}
     case RESET_CRITICALITY:
       return {...state, criticality: []}
+    case FILTER_BY_DESCRIPTION:
+      return {...state, description: action.description}
     default:
       return state
   }
@@ -63,21 +67,37 @@ const defaultFetching = {
   isFetching: false,
   promise: null,
   error: null,
-  lastFilters: null
+  events: [],
+  categories: {}
 }
-function fetching (state = defaultFetching, action) {
+function api (state = defaultFetching, action) {
   switch (action.type) {
     case FETCH_EVENTS:
+      // Here's the part where we'd state.promise.abort, but that's not yet implemented:
+      // https://github.com/whatwg/fetch/pull/523
       return {
         ...state,
         isFetching: true,
         error: null,
-        promise: action.promise,
-        lastFilters: action.filters
+        promise: action.promise
       }
     case RECEIVED_EVENTS:
-      return {...state, isFetching: false, error: null}
+      // Since we can't abort ongoing requests, instead we just check
+      // if the response we just got is the response to the latest request we made
+      if (action.promise !== state.promise) {
+        return state
+      }
+      return {
+        ...state,
+        isFetching: false,
+        error: null,
+        events: events(state.events, action),
+        categories: categories(state.categories, action)
+      }
     case FETCH_FAILED:
+      if (action.promise !== state.promise) {
+        return state
+      }
       return {...state, isFetching: false, error: action.error}
     default:
       return state
@@ -93,4 +113,4 @@ function filtersHeight (state = 200, action) {
   }
 }
 
-export default combineReducers({filters, events, categories, fetching, filtersHeight})
+export default combineReducers({filters, api, filtersHeight})
