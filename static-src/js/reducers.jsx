@@ -3,8 +3,8 @@ import {countBy, assign} from 'lodash'
 import {flow, map, toPairs, fromPairs, xor} from 'lodash/fp'
 
 import {
-  TOGGLE_CATEGORY, SHOW_SINGLE_CATEGORY, RESET_CATEGORIES,
-  TOGGLE_CRITICALITY, RESET_CRITICALITY,
+  TOGGLE_CATEGORY, SHOW_SINGLE_CATEGORY, RESET_CATEGORIES, SET_CATEGORIES,
+  TOGGLE_CRITICALITY, RESET_CRITICALITY, SET_CRITICALITIES,
   FILTER_BY_DESCRIPTION,
   SET_UNTIL, SET_HOURS_AGO,
   FETCH_EVENTS, FETCH_FAILED, RECEIVED_EVENTS,
@@ -27,17 +27,21 @@ function filters (state = defaultFilters, action) {
       return {...state, category: [action.category]}
     case RESET_CATEGORIES:
       return {...state, category: []}
+    case SET_CATEGORIES:
+      return {...state, category: action.categories}
     case TOGGLE_CRITICALITY:
       return {...state, criticality: xor(state.criticality, [action.criticality])}
     case RESET_CRITICALITY:
       return {...state, criticality: []}
+    case SET_CRITICALITIES:
+      return {...state, criticality: action.criticalities}
     case FILTER_BY_DESCRIPTION:
       return {...state, description: action.description}
     case SET_UNTIL:
-      if (action.until > new Date()) {
+      if (action.until > new Date().getTime() / 1000) {
         return state
       }
-      return {...state, until: Math.round(action.until.getTime() / 1000)}
+      return {...state, until: action.until}
     case SET_HOURS_AGO:
       if (action.hoursAgo < 1) {
         return state
@@ -66,6 +70,7 @@ function categories (state = {}, action) {
           map(([category, count]) => [category, 0]),
           fromPairs
         )(state),
+        ...map(c => { const o = {}; o[c] = 0; return o })(action.filters.category),
         countBy(action.events, (e) => e.category)
       )
     default:

@@ -1,5 +1,6 @@
 import {isEqual} from 'lodash'
 import {fetchEvents, FETCH_EVENTS} from './actions.jsx'
+import qs from 'query-string'
 
 export const fetchWhenFilterChangesMiddleware = store => next => action => {
   const lastFilters = store.getState().filters
@@ -9,6 +10,34 @@ export const fetchWhenFilterChangesMiddleware = store => next => action => {
     store.dispatch(fetchEvents(currentFilters))
   }
   return retval
+}
+
+export const syncFiltersToHistory = history => {
+  var enabled = false
+  const f = store => next => action => {
+    const retval = next(action)
+    if (!enabled) {
+      return retval
+    }
+    const currentFilters = store.getState().filters
+    const search = qs.stringify({
+      until: currentFilters.until,
+      hours_ago: currentFilters.hours_ago,
+      description: currentFilters.description,
+      category: currentFilters.category.join(','),
+      criticality: currentFilters.criticality.join(',')
+    })
+    const currentLocation = history.location
+    if (action.type === FETCH_EVENTS && currentLocation && currentLocation.search !== '?' + search) {
+      history.push({
+        pathname: '/',
+        search
+      })
+    }
+    return retval
+  }
+  f.setEnabled = (val) => { enabled = val }
+  return f
 }
 
 // Inline https://github.com/ryanseddon/redux-debounced/pull/10 until it's merged (if ever)

@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setUntil: (date) => dispatch(setUntil(date)),
+    setUntil: (date) => dispatch(setUntil(Math.round(date.getTime() / 1000))),
     setHoursAgo: (n) => dispatch(setHoursAgo(n))
   }
 }

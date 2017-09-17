@@ -5,22 +5,15 @@ import Filters from '../containers/Filters.jsx'
 import EventsList from '../containers/EventsList.jsx'
 import Loader from '../containers/Loader.jsx'
 
-export default class MainContainer extends React.Component {
-  componentDidMount () {
-    this.props.init(this.props.filters)
-  }
+const Main = ({filtersHeight}) =>
+  <div className='main-container'>
+    <Filters />
+    <Loader />
+    <EventsList height={window.innerHeight - filtersHeight - 10} />
+  </div>
 
-  render () {
-    return (<div className='main-container'>
-      <Filters />
-      <Loader />
-      <EventsList height={window.innerHeight - this.props.filtersHeight - 10} />
-    </div>)
-  }
-}
-
-MainContainer.propTypes = {
-  init: PropTypes.func.isRequired,
-  filters: PropTypes.object.isRequired,
+Main.propTypes = {
   filtersHeight: PropTypes.number.isRequired
 }
+
+export default Main

@@ -22,6 +22,14 @@ export function resetCategories () {
   return {type: RESET_CATEGORIES}
 }
 
+export const SET_CATEGORIES = 'SET_CATEGORIES'
+export function setCategories (categories) {
+  return {
+    type: SET_CATEGORIES,
+    categories
+  }
+}
+
 export const TOGGLE_CRITICALITY = 'TOGGLE_CRITICALITY'
 export function toggleCriticality (criticality) {
   return {
@@ -33,6 +41,14 @@ export function toggleCriticality (criticality) {
 export const RESET_CRITICALITY = 'RESET_CRITICALITY'
 export function resetCriticality () {
   return {type: RESET_CRITICALITY}
+}
+
+export const SET_CRITICALITIES = 'SET_CRITICALITIES'
+export function setCriticalities (criticalities) {
+  return {
+    type: SET_CRITICALITIES,
+    criticalities
+  }
 }
 
 export const FILTER_BY_DESCRIPTION = 'FILTER_BY_DESCRIPTION'
@@ -51,7 +67,7 @@ export function setUntil (until) {
   }
 }
 
-export const SET_HOURS_AGO = 'HOURS_AGO'
+export const SET_HOURS_AGO = 'SET_HOURS_AGO'
 export function setHoursAgo (hoursAgo) {
   return {
     type: SET_HOURS_AGO,
@@ -59,10 +75,17 @@ export function setHoursAgo (hoursAgo) {
   }
 }
 
+var fetchingPaused = false
+export const pauseFetching = () => { fetchingPaused = true }
+export const resumeFetching = () => { fetchingPaused = false }
+
 export const FETCH_EVENTS = 'FETCH_EVENTS'
 export function fetchEvents (filters) {
+  if (fetchingPaused) {
+    return {type: 'NOOP'}
+  }
   const thunk = (dispatch) => {
-    const url = new window.URL(window.location.href + 'api/events')
+    const url = new window.URL(window.location.origin + '/api/events')
     flow([
       toPairs,
       filter(([key, value]) => isArray(value) ? !isEmpty(value) : !isNull(value)),
@@ -71,8 +94,8 @@ export function fetchEvents (filters) {
     const promise = window
       .fetch(url, {credentials: 'include'})
       .then(res => res.json())
-      .then(json => dispatch(receivedEvents(json, promise)))
-      .catch(error => dispatch(fetchFailed(error, promise)))
+      .then(json => dispatch(receivedEvents(json, promise, filters)))
+      .catch(error => dispatch(fetchFailed(error, promise, filters)))
     dispatch({type: FETCH_EVENTS, filters, promise})
   }
   thunk.meta = {
@@ -87,21 +110,23 @@ export function fetchEvents (filters) {
 }
 
 export const RECEIVED_EVENTS = 'RECEIVED_EVENTS'
-export function receivedEvents (events, promise) {
+export function receivedEvents (events, promise, filters) {
   return {
     type: RECEIVED_EVENTS,
     receivedAt: new Date(),
     events,
-    promise
+    promise,
+    filters
   }
 }
 
 export const FETCH_FAILED = 'FETCH_FAILED'
-export function fetchFailed (error, promise) {
+export function fetchFailed (error, promise, filters) {
   return {
     type: FETCH_FAILED,
     error,
-    promise
+    promise,
+    filters
   }
 }
 
