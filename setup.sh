@@ -7,9 +7,18 @@ npm install
 cat <<EOF
 
 All done. You can now start the application with
-. virtualenv/bin/activate; python application.py
 
-In production, point a WSGI server at application.wsgi
+   . virtualenv/bin/activate; python application.py
+
+For development, you'll want to also run the frontend
+build process:
+
+    npm run watch
+
+For production, point a WSGI server at application.wsgi.
+Build the production client bundle with:
+
+    npm run build
 
 You may want to install a database client binding after
 activating the virtualenv.
