@@ -4,7 +4,8 @@ import Component from '../components/Loader.jsx'
 
 const mapStateToProps = (state) => {
   return {
-    isLoading: state.api.isFetching
+    isLoading: state.api.isFetching,
+    hasError: state.api.error !== null
   }
 }
 

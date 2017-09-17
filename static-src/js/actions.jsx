@@ -55,7 +55,7 @@ export function fetchEvents (filters) {
       .fetch(url)
       .then(res => res.json())
       .then(json => dispatch(receivedEvents(json, promise)))
-      .catch(error => dispatch(fetchFailed(error)))
+      .catch(error => dispatch(fetchFailed(error, promise)))
     dispatch({type: FETCH_EVENTS, filters, promise})
   }
   thunk.meta = {
