@@ -1,5 +1,21 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+@import url('https://fonts.googleapis.com/css?family=Roboto|Roboto%20Mono:300,400,500');
 
 * {
     font-family: 'Roboto', sans-serif;
+}
+
+.events-table {
+    font-size: 13px;
+}
+
+.events-table * {
+    font-family: 'Roboto Mono', monospace;
+}
+
+.events-table-row {
+    border-bottom: 1px solid silver;
+}
+
+.events-table-row:hover div {
+    background-color: #cccccc !important;
 }

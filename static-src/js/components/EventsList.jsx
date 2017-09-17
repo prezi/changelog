@@ -16,14 +16,31 @@ const EventsList = ({events, height}) => {
   const criticalityWidth = 50
   const categoryWidth = 200
   const timeWidth = 200
-  const descriptionWidth = fullWidth - timeWidth - categoryWidth - criticalityWidth
+  const descriptionWidth = fullWidth - criticalityWidth - categoryWidth - timeWidth
+  const rowHeightGetter = (rowIndex) => {
+    if (!events[rowIndex]) {
+      return 30
+    }
+    // This might have markup, so let's strip it out
+    const description = events[rowIndex].description
+    const div = document.createElement('div')
+    div.innerHTML = description
+    const strippedDescription = div.textContent || div.innerText || ''
+    // This is.. uhh... mostly guess-work.
+    // 10 is a good margin. 19 is roughly the height of one line
+    // the rest is "how many lines does this text need?", and 9 seems like an OK constant.
+    return 10 + 19 * Math.max(1, Math.ceil(strippedDescription.length * 9 / descriptionWidth))
+  }
   return (
     <Table
       rowsCount={events.length}
       width={fullWidth}
       height={height}
       rowHeight={30}
-      headerHeight={40}
+      rowHeightGetter={rowHeightGetter}
+      headerHeight={30}
+      className='events-table'
+      rowClassNameGetter={n => 'events-table-row'}
     >
       <Column
         width={criticalityWidth}
