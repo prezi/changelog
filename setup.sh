@@ -1,6 +1,8 @@
 #!/bin/bash
+set -euo pipefail
+
 [ -d ./virtualenv ] || virtualenv virtualenv
-. virtualenv/bin/activate
+set +u; . virtualenv/bin/activate; set -u
 pip install -r requirements.txt
 npm install
 
