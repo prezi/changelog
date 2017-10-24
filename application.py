@@ -1,7 +1,7 @@
 import time
+from flask import Flask
 import calendar
 from datetime import datetime
-from flask import Flask, render_template
 from flask.ext.restful import reqparse, Api, Resource
 from raven.contrib.flask import Sentry
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -10,8 +10,10 @@ from sqlalchemy.exc import IntegrityError
 import settings
 from sqlalchemy.ext.declarative import declarative_base
 from flask.ext.cors import CORS
+from flask_compress import Compress
 
 app = Flask(__name__)
+Compress(app)
 
 if settings.USE_SENTRY:
     app.config['SENTRY_DSN'] = settings.SENTRY_DSN
@@ -163,9 +165,7 @@ def healthcheck():
 
 @app.route('/')
 def index():
-    statement = select([distinct(events.c.category)])
-    categories = [str(entry[0]) for entry in db.engine.execute(statement).fetchall()]
-    return render_template('index.html', categories=categories)
+    return app.send_static_file('index.html')
 
 @app.route('/query', methods=['POST'])
 def query():

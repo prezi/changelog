@@ -67,9 +67,19 @@ Prerequisites:
 ```sh
 git clone https://github.com/prezi/changelog.git
 cd changelog
+
+# Install dependencies
 ./setup.sh
+
+# In on shell, start the server
 . virtualenv/bin/activate
 python application.py
+
+# In another shell, start the Webpack watcher
+npm run watch
+
+# When building for production, create a production frontend bundle
+npm run build
 ```
 
 ### Database support
