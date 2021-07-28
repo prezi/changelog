@@ -1,4 +1,4 @@
-Flask==0.10.1
+Flask==1.0
 Flask-RESTful==0.2.12
 Flask-SQLAlchemy==1.0
 Jinja2==2.7.2
