@@ -2,22 +2,21 @@ import time
 from flask import Flask
 import calendar
 from datetime import datetime
-from flask.ext.restful import reqparse, Api, Resource
-from raven.contrib.flask import Sentry
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_restful import reqparse, Api, Resource
+import sentry_sdk
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, distinct, select
 from sqlalchemy.exc import IntegrityError
 import settings
-from sqlalchemy.ext.declarative import declarative_base
-from flask.ext.cors import CORS
+from sqlalchemy.orm import declarative_base
+from flask_cors import CORS
 from flask_compress import Compress
 
 app = Flask(__name__)
 Compress(app)
 
 if settings.USE_SENTRY:
-    app.config['SENTRY_DSN'] = settings.SENTRY_DSN
-    sentry = Sentry(app)
+    sentry_sdk.init(dsn=settings.SENTRY_DSN, enable_tracing=True)
 
 try:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+settings.DB_PATH
@@ -54,7 +53,9 @@ events = Table('events', Base.metadata,
                Column('category', db.String(30), index=True),
                Column('description', db.String(1000), index=True)
                )
-Base.metadata.create_all(db.engine)
+
+with app.app_context():
+    Base.metadata.create_all(db.engine)
 
 
 class Event(db.Model):
