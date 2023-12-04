@@ -31,15 +31,15 @@ cors = CORS(app, supports_credentials=True)
 json_parser = reqparse.RequestParser()
 json_parser.add_argument('criticality', type=int, required=True, location='json')
 json_parser.add_argument('unix_timestamp', type=int, required=True, location='json')
-json_parser.add_argument('category', type=unicode, required=True, location='json')
-json_parser.add_argument('description', type=unicode, required=True, location='json')
+json_parser.add_argument('category', type=str, required=True, location='json')
+json_parser.add_argument('description', type=str, required=True, location='json')
 
 query_parser = reqparse.RequestParser()
-query_parser.add_argument('criticality', type=unicode)
+query_parser.add_argument('criticality', type=str)
 query_parser.add_argument('hours_ago', type=float, required=True)
 query_parser.add_argument('until', type=int)
-query_parser.add_argument('category', type=unicode)
-query_parser.add_argument('description', type=unicode)
+query_parser.add_argument('category', type=str)
+query_parser.add_argument('description', type=str)
 
 annotation_query_parser = reqparse.RequestParser()
 annotation_query_parser.add_argument('range', type=dict, required=True, location='json')
@@ -160,7 +160,7 @@ def healthcheck():
             return "1 FAIL: No record is found in the database."
         else:
             return "0 OK: There is at least one record in the database."
-    except Exception, e:
+    except Exception as e:
         return ("1 FAIL: Some exception occured:\n %s" % str(e))
 
 @app.route('/')
