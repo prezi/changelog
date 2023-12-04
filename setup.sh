@@ -1,9 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-[ -d ./virtualenv ] || virtualenv virtualenv
+[ -d ./virtualenv ] || python3 -m virtualenv virtualenv
 set +u; . virtualenv/bin/activate; set -u
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 npm install
 
 cat <<EOF
