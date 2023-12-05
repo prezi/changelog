@@ -3,11 +3,9 @@ FROM ubuntu:jammy
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install system-level dependencies
-# python-is-python3 is required to keep compatibility with ancient node libraries (node-sass, using node-gyp)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         python3 python3-dev python3-pip \
-        python-is-python3 \
         sqlite3 \
         netbase \
         gzip \
@@ -15,8 +13,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 
-# it's ancient, will be upgraded later
-ARG NODEJS_VERSION=v4.2.6
+ARG NODEJS_VERSION=v20.10.0
 # Installing nodejs from nodesource.com installs unwanted python distributions as dependencies
 # Downloading gzipped distribution instead
 RUN curl https://nodejs.org/dist/$NODEJS_VERSION/node-$NODEJS_VERSION-linux-x64.tar.gz -fsS | tar -xz --strip-components=1 -C /usr/local
@@ -29,11 +26,12 @@ COPY requirements*.txt .
 RUN python3 -m pip install -r requirements.txt -r requirements-mysql.txt -r requirements-postgres.txt gunicorn eventlet
 
 COPY package*json .
+COPY npm-shrinkwrap.json .
+COPY webpack*js .
 
 RUN npm install
-RUN npm run build
-
 COPY . /opt/changelog
+RUN npm run build
 
 # Default configuration
 ENV CHANGELOG_SETTINGS_PATH=/tmp/custom_settings.py \
