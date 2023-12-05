@@ -91,14 +91,8 @@ export function fetchEvents (filters) {
       filter(([key, value]) => isArray(value) ? !isEmpty(value) : !isNull(value)),
       forEach(([key, value]) => url.searchParams.append(key, value))
     ])(filters)
-    const requestOptions = {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      credentials: 'include'
-    }
     const promise = window
-      .fetch(url, requestOptions)
+      .fetch(url, {credentials: 'include'})
       .then(res => res.json())
       .then(json => dispatch(receivedEvents(json, promise, filters)))
       .catch(error => dispatch(fetchFailed(error, promise, filters)))
