@@ -1,2 +1,4 @@
 virtualenv
 changelog.db
+node_modules
+static

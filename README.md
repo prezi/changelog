@@ -60,7 +60,7 @@ sudo docker run -p 5000:5000 -it prezi/changelog
 Prerequisites:
 
  - a relational database
- - python 2
+ - python 3
  - virtualenv
  - optionally: a [Sentry](https://getsentry.com/) server for collecting exceptions; not that there'll be any :)
 

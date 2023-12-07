@@ -1,25 +1,37 @@
-FROM ubuntu:17.04
+FROM ubuntu:jammy
 
-WORKDIR /opt/changelog
-ADD . /opt/changelog
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install system-level dependencies
-RUN set -x \
- && apt-get update \
- && apt-get install -y --no-install-recommends \
-        python python-dev virtualenv \
-        nodejs npm nodejs-legacy \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        python3 python3-dev python3-pip \
         sqlite3 \
-        libmysqlclient-dev mysql-client \
-        build-essential libpq-dev \
-        netbase
+        netbase \
+        gzip \
+        curl && \
+    rm -rf /var/lib/apt/lists/*
+
+
+ARG NODEJS_VERSION=v20.10.0
+# Installing nodejs from nodesource.com installs unwanted python distributions as dependencies
+# Downloading gzipped distribution instead
+RUN curl https://nodejs.org/dist/$NODEJS_VERSION/node-$NODEJS_VERSION-linux-x64.tar.gz -fsS | tar -xz --strip-components=1 -C /usr/local
+
+WORKDIR /opt/changelog
+
+COPY requirements*.txt .
 
 # Install application-level dependencies and build frontend
-RUN set -x \
- && /opt/changelog/setup.sh \
- && /opt/changelog/virtualenv/bin/pip install -r requirements-mysql.txt -r requirements-postgres.txt gunicorn eventlet \
- && cd /opt/changelog \
- && npm run build
+RUN python3 -m pip install -r requirements.txt -r requirements-mysql.txt -r requirements-postgres.txt gunicorn eventlet
+
+COPY package*json .
+COPY npm-shrinkwrap.json .
+COPY webpack*js .
+
+RUN npm install
+COPY . /opt/changelog
+RUN npm run build
 
 # Default configuration
 ENV CHANGELOG_SETTINGS_PATH=/tmp/custom_settings.py \
@@ -28,4 +40,4 @@ ENV CHANGELOG_SETTINGS_PATH=/tmp/custom_settings.py \
     LISTEN_PORT=5000
 
 EXPOSE $LISTEN_PORT
-CMD /opt/changelog/run.sh
+CMD ["/opt/changelog/run.sh"]

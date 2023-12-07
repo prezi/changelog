@@ -2,22 +2,21 @@ import time
 from flask import Flask
 import calendar
 from datetime import datetime
-from flask.ext.restful import reqparse, Api, Resource
-from raven.contrib.flask import Sentry
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_restful import reqparse, Api, Resource
+import sentry_sdk
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, distinct, select
 from sqlalchemy.exc import IntegrityError
 import settings
-from sqlalchemy.ext.declarative import declarative_base
-from flask.ext.cors import CORS
+from sqlalchemy.orm import declarative_base
+from flask_cors import CORS
 from flask_compress import Compress
 
 app = Flask(__name__)
 Compress(app)
 
 if settings.USE_SENTRY:
-    app.config['SENTRY_DSN'] = settings.SENTRY_DSN
-    sentry = Sentry(app)
+    sentry_sdk.init(dsn=settings.SENTRY_DSN, enable_tracing=True)
 
 try:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+settings.DB_PATH
@@ -31,15 +30,15 @@ cors = CORS(app, supports_credentials=True)
 json_parser = reqparse.RequestParser()
 json_parser.add_argument('criticality', type=int, required=True, location='json')
 json_parser.add_argument('unix_timestamp', type=int, required=True, location='json')
-json_parser.add_argument('category', type=unicode, required=True, location='json')
-json_parser.add_argument('description', type=unicode, required=True, location='json')
+json_parser.add_argument('category', type=str, required=True, location='json')
+json_parser.add_argument('description', type=str, required=True, location='json')
 
 query_parser = reqparse.RequestParser()
-query_parser.add_argument('criticality', type=unicode)
-query_parser.add_argument('hours_ago', type=float, required=True)
-query_parser.add_argument('until', type=int)
-query_parser.add_argument('category', type=unicode)
-query_parser.add_argument('description', type=unicode)
+query_parser.add_argument('criticality', type=str, location='args')
+query_parser.add_argument('hours_ago', type=float, location='args', required=True)
+query_parser.add_argument('until', type=int, location='args')
+query_parser.add_argument('category', type=str, location='args')
+query_parser.add_argument('description', type=str, location='args')
 
 annotation_query_parser = reqparse.RequestParser()
 annotation_query_parser.add_argument('range', type=dict, required=True, location='json')
@@ -54,7 +53,9 @@ events = Table('events', Base.metadata,
                Column('category', db.String(30), index=True),
                Column('description', db.String(1000), index=True)
                )
-Base.metadata.create_all(db.engine)
+
+with app.app_context():
+    Base.metadata.create_all(db.engine)
 
 
 class Event(db.Model):
@@ -160,7 +161,7 @@ def healthcheck():
             return "1 FAIL: No record is found in the database."
         else:
             return "0 OK: There is at least one record in the database."
-    except Exception, e:
+    except Exception as e:
         return ("1 FAIL: Some exception occured:\n %s" % str(e))
 
 @app.route('/')
