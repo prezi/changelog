@@ -5,7 +5,7 @@ from datetime import datetime
 from flask_restful import reqparse, Api, Resource
 import sentry_sdk
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Table, Column, distinct, select
+from sqlalchemy import Table, Column
 from sqlalchemy.exc import IntegrityError
 import settings
 from sqlalchemy.orm import declarative_base
